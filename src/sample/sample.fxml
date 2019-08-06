@@ -118,7 +118,6 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
@@ -134,9 +133,8 @@
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin></Label>
-                              <Label text="Quantity:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label text="Price:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                              <Label text="Weight:" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label text="Price:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label text="Weight:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <TextField fx:id="fld_id" GridPane.columnIndex="2">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
@@ -149,20 +147,16 @@
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin></TextField>
-                              <TextField fx:id="qty_fld" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                              <TextField fx:id="price_fld" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin></TextField>
-                              <TextField fx:id="price_fld" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin></TextField>
-                              <TextField fx:id="weight_fld" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                              <TextField fx:id="weight_fld" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin>
                               </TextField>
-                              <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6">
+                              <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="5">
                                 <buttons>
                                   <Button fx:id="item_addbtn" mnemonicParsing="false" prefWidth="70.0" text="Add" />
                                     <Button fx:id="item_editbtn" mnemonicParsing="false" prefWidth="70.0" text="Edit" />
