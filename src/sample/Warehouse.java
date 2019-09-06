@@ -34,6 +34,6 @@ public class Warehouse {
         this.location = location;
         this.name = name;
     }
-    public Warehouse() {
+     public Warehouse() {
     }
 }
