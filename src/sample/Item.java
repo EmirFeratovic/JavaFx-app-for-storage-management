@@ -5,31 +5,16 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Item {
-    private SimpleIntegerProperty id;
-    private SimpleStringProperty name, description;
-    private SimpleDoubleProperty price, weight;
-
-    public Item(int id, String name, String description, double price, double weight) {
-        this.id = new SimpleIntegerProperty(id);
-        this.name = new SimpleStringProperty(name);
-        this.description = new SimpleStringProperty(description);
-        this.price = new SimpleDoubleProperty(price);
-        this.weight = new SimpleDoubleProperty(weight);
-    }
-
-    public Item() {
-    }
+    private int id;
+    private SimpleStringProperty name = new SimpleStringProperty() , description = new SimpleStringProperty();
+    private SimpleDoubleProperty price= new SimpleDoubleProperty(), weight = new SimpleDoubleProperty();
 
     public int getId() {
-        return id.get();
-    }
-
-    public SimpleIntegerProperty idProperty() {
         return id;
     }
 
     public void setId(int id) {
-        this.id.set(id);
+        this.id = id;
     }
 
     public String getName() {
@@ -79,6 +64,18 @@ public class Item {
     public void setWeight(double weight) {
         this.weight.set(weight);
     }
+
+    public Item(int id, String name, String description, double price, double weight) {
+        this.id =id;
+        this.name = new SimpleStringProperty(name);
+        this.description = new SimpleStringProperty(description);
+        this.price = new SimpleDoubleProperty(price);
+        this.weight = new SimpleDoubleProperty(weight);
+    }
+
+    public Item() {
+    }
+
 
     @Override
     public String toString() {

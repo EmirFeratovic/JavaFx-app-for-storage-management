@@ -2,14 +2,15 @@ package sample;
 
 public class StorageItem {
 
-    int id,warehouse,quantity;
+    int id,quantity;
+    Warehouse warehouse;
     double pricePerItem,totalPrice;
     Item item;
 
     public StorageItem() {
     }
 
-    public StorageItem(int id, int warehouse, int quantity, double pricePerItem, double totalPrice, Item item) {
+    public StorageItem(int id, Warehouse warehouse, int quantity, double pricePerItem, double totalPrice, Item item) {
         this.id = id;
         this.warehouse = warehouse;
         this.quantity = quantity;
@@ -26,11 +27,11 @@ public class StorageItem {
         this.id = id;
     }
 
-    public int getWarehouse() {
+    public Warehouse getWarehouse() {
         return warehouse;
     }
 
-    public void setWarehouse(int warehouse) {
+    public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
     }
 
