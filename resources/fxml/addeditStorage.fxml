@@ -3,13 +3,13 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="425.0" xmlns="http://javafx.com/javafx/8.0.999-ea" xmlns:fx="http://javafx.com/fxml/1">
    <center>
@@ -35,10 +35,10 @@
             <Label text="Price per item:" GridPane.rowIndex="3" />
             <Label text="Total price:" GridPane.rowIndex="4" />
             <TextField fx:id="storageloc_fld" GridPane.columnIndex="1" />
-            <TextField fx:id="storageitem_fld" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="storageqty_fld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="storagepricepi_fld" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="storagetotprice_fld" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ChoiceBox fx:id="item_cb" prefWidth="310.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </center>

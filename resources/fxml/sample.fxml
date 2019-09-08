@@ -164,7 +164,6 @@
                             <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
                           </columnConstraints>
                           <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -177,37 +176,32 @@
                                     <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
                                  </GridPane.margin>
                               </ListView>
-                              <Label text="ID:" GridPane.columnIndex="1" />
-                              <Label text="Name:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Description:" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              <Label text="Name:" GridPane.columnIndex="1" />
+                              <Label text="Description:" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin></Label>
-                              <Label text="Price:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <Label text="Weight:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <TextField fx:id="fld_id" GridPane.columnIndex="2">
+                              <Label text="Price:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Weight:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="fld_name" GridPane.columnIndex="2">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin></TextField>
-                              <TextField fx:id="fld_name" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                              <TextField fx:id="price_fld" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin></TextField>
-                              <TextField fx:id="price_fld" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin></TextField>
-                              <TextField fx:id="weight_fld" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                              <TextField fx:id="weight_fld" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin>
                               </TextField>
-                              <TextArea fx:id="desc_textarea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                              <TextArea fx:id="desc_textarea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                  <GridPane.margin>
                                     <Insets right="10.0" />
                                  </GridPane.margin>
                               </TextArea>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                  <children>
                                     <Button fx:id="item_addbtn" mnemonicParsing="false" onAction="#itemadd_action" prefWidth="25.0" textAlignment="CENTER">
                                        <HBox.margin>
