@@ -34,11 +34,11 @@
             <Label text="Quantity:" GridPane.rowIndex="2" />
             <Label text="Price per item:" GridPane.rowIndex="3" />
             <Label text="Total price:" GridPane.rowIndex="4" />
-            <TextField fx:id="storagewh_fld" GridPane.columnIndex="1" />
             <TextField fx:id="storageqty_fld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="storagepricepi_fld" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="storagetotprice_fld" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <ChoiceBox fx:id="item_cb" prefWidth="310.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="warehouse_cb" prefWidth="310.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </center>

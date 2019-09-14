@@ -1,6 +1,9 @@
 package sample;
 
+import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,7 +34,7 @@ public class Controller {
     public Button warehouse_deletebtn;
     public Tab storage_tab;
     public TextField search_fld;
-    public ChoiceBox locations_cb;
+    public ChoiceBox<Warehouse> locations_cb;
     public Button storage_addbtn;
     public Button storage_editbtn;
     public Button storage_deletebtn;
@@ -56,7 +59,10 @@ public class Controller {
     ArrayList<Warehouse> arrayList = new ArrayList<>();
     ArrayList<StorageItem> arrayList2 = new ArrayList<>();
     ArrayList<Item> arrayList3=new ArrayList<>();
-
+    private ObservableList<Warehouse> warehouses;
+    private ObservableList<StorageItem> storageItems;
+    private ObservableList<Item> items;
+    private ObservableList<Warehouse> filtered;
 
 
     @FXML
@@ -66,7 +72,7 @@ public class Controller {
         warehouse.setLocation("Sarajevo");
         warehouse.setName("SaTrade");
         arrayList.add(warehouse);
-        ObservableList<Warehouse> warehouses =  FXCollections.observableArrayList(arrayList);
+        warehouses =  FXCollections.observableArrayList(arrayList);
 
         warehouse_tbl.setItems(warehouses);
         warehouse_id_col.setCellValueFactory(new PropertyValueFactory("id"));
@@ -80,6 +86,7 @@ public class Controller {
         item.setName("Nvidia GTX 1050");
         item.setWeight(450);
         item.setPrice(600);
+        arrayList3.add(item);
         StorageItem storageItem = new StorageItem();
         storageItem.setId(1);
         storageItem.setItem(item);
@@ -88,7 +95,7 @@ public class Controller {
         storageItem.setTotalPrice(storageItem.getQuantity() * storageItem.getPricePerItem());
         storageItem.setWarehouse(warehouse);
         arrayList2.add(storageItem);
-        ObservableList<StorageItem> storageItems =  FXCollections.observableArrayList(arrayList2);
+        storageItems =  FXCollections.observableArrayList(arrayList2);
         storage_tbl.setItems(storageItems);
         storage_id_col.setCellValueFactory(new PropertyValueFactory("id"));
         storage_item_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getItem().getName()));
@@ -104,7 +111,7 @@ public class Controller {
         item3.setName("AMD FX8120");
         item3.setDescription("8 core, 3.1ghz, 250");
         arrayList3.add(item3);
-        ObservableList<Item> items = FXCollections.observableArrayList(arrayList3);
+        items = FXCollections.observableArrayList(arrayList3);
         item_list.setItems(items);
 
         item_list.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -125,10 +132,31 @@ public class Controller {
                 desc_textarea.textProperty().bindBidirectional(newValue.descriptionProperty());
                 weight_fld.textProperty().bindBidirectional(newValue.weightProperty(), new NumberStringConverter());
             }
+            item_list.refresh();
+            storage_tbl.refresh();
         });
 
+        filtered = FXCollections.observableArrayList(warehouses);
+        Warehouse warehouse2 = new Warehouse(-1, "All", "All");
+        filtered.add(warehouse2);
+        locations_cb.setItems(filtered);
+        locations_cb.getSelectionModel().select(warehouse2);
 
+        locations_cb.getSelectionModel().selectedItemProperty().addListener((observableValue, warehouse1, t1) -> {
+            // NE RADI NE STAVLJA NOVI WAREHOUSE U COMBOBOX IZ NEKOG RAZLOGA
+            ArrayList<StorageItem> filter = new ArrayList<>();
+            if(!filtered.contains(warehouse2))filtered.add(warehouse2);
+            for (StorageItem stIt: storageItems) {
+                if(stIt.getWarehouse().getId()==locations_cb.getSelectionModel().getSelectedItem().getId()) {
+                    filter.add(stIt);
+                }
+            }
 
+            ObservableList<StorageItem> storageItems2 = FXCollections.observableArrayList(filter);
+            if(locations_cb.getSelectionModel().getSelectedItem().equals(warehouse2)) storageItems2 = FXCollections.observableArrayList(storageItems);
+            storage_tbl.setItems(storageItems2);
+            storage_tbl.refresh();
+    });
     }
 
     public void warehoseadd_action(ActionEvent actionEvent) {
@@ -144,12 +172,22 @@ public class Controller {
             stage.setTitle("Warehouse");
             stage.setScene(new Scene(root));
             stage.show();
+            stage.setOnHiding(event -> {
+                Warehouse warehouse = warehouseController.getWarehouse();
+                if (warehouse != null) {
+                    arrayList.add(warehouse);
+                    warehouses.add(warehouse);
+                    filtered = FXCollections.observableArrayList(warehouses);
+                    warehouse_tbl.refresh();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void warehouseedit_action(ActionEvent actionEvent) {
+        if(warehouse_tbl.getSelectionModel().getSelectedItem() == null) return;
         Stage stage = new Stage();
         stage.setResizable(false);
         Parent root;
@@ -161,6 +199,13 @@ public class Controller {
             stage.setTitle("Warehouse");
             stage.setScene(new Scene(root));
             stage.show();
+            stage.setOnHiding(event -> {
+                Warehouse warehouse = warehouseController.getWarehouse();
+                if (warehouse != null) {
+                    //warehouses.add(warehouse);
+                    warehouse_tbl.refresh();
+                }
+            });
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -179,10 +224,8 @@ public class Controller {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            arrayList.remove(warehouse_tbl.getSelectionModel().getSelectedItem());
-           // arrayList.removeAll(warehouse_tbl.getSelectionModel().getSelectedItem());
-            ObservableList<Warehouse> warehouses =  FXCollections.observableArrayList(arrayList);
-            warehouse_tbl.setItems(warehouses);
+            arrayList.remove(warehouse);
+            warehouses.remove(warehouse_tbl.getSelectionModel().getSelectedItem());
             warehouse_tbl.refresh();
         }
     }
@@ -190,6 +233,10 @@ public class Controller {
 
 
     public void itemadd_action(ActionEvent actionEvent) {
+        items.add(new Item());
+        item_list.refresh();
+        item_list.getSelectionModel().selectLast();
+        arrayList3.add(item_list.getSelectionModel().getSelectedItem());
     }
 
     public void itemdelete_action(ActionEvent actionEvent) {
@@ -205,9 +252,7 @@ public class Controller {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             arrayList3.remove(item_list.getSelectionModel().getSelectedItem());
-            // arrayList.removeAll(warehouse_tbl.getSelectionModel().getSelectedItem());
-            ObservableList<Item> items =  FXCollections.observableArrayList(arrayList3);
-            item_list.setItems(items);
+            items.removeAll(item);
             item_list.refresh();
         }
     }
@@ -222,12 +267,19 @@ public class Controller {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditStorage.fxml"));
-            addeditControllerStorage storageController = new addeditControllerStorage(null);
+            addeditControllerStorage storageController = new addeditControllerStorage(null, arrayList3,arrayList);
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");
             stage.setScene(new Scene(root));
             stage.show();
+            stage.setOnHiding(event -> {
+                StorageItem storageItem = storageController.getStorageItem();
+                if (storageItem != null) {
+                    storageItems.add(storageItem);
+                    storage_tbl.refresh();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -241,12 +293,18 @@ public class Controller {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditStorage.fxml"));
-            addeditControllerStorage storageController = new addeditControllerStorage(storage_tbl.getSelectionModel().getSelectedItem());
+            addeditControllerStorage storageController = new addeditControllerStorage(storage_tbl.getSelectionModel().getSelectedItem(), arrayList3,arrayList);
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");
             stage.setScene(new Scene(root));
             stage.show();
+            stage.setOnHiding(event -> {
+                StorageItem storageItem = storageController.getStorageItem();
+                if (storageItem != null) {
+                    storage_tbl.refresh();
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -264,10 +322,8 @@ public class Controller {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            arrayList.remove(storage_tbl.getSelectionModel().getSelectedItem());
-            // arrayList.removeAll(warehouse_tbl.getSelectionModel().getSelectedItem());
-            ObservableList<StorageItem> storageItems =  FXCollections.observableArrayList(arrayList2);
-            storage_tbl.setItems(storageItems);
+            arrayList2.remove(storage);
+            storageItems.removeAll(storage);
             storage_tbl.refresh();
         }
     }

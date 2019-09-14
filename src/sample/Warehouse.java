@@ -1,9 +1,11 @@
 package sample;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class Warehouse {
     private int id;
-    private String location;
-    private String name;
+    private SimpleStringProperty location = new SimpleStringProperty("");
+    private SimpleStringProperty name = new SimpleStringProperty("");
 
     public int getId() {
         return id;
@@ -14,31 +16,39 @@ public class Warehouse {
     }
 
     public String getLocation() {
+        return location.get();
+    }
+
+    public SimpleStringProperty locationProperty() {
         return location;
     }
 
     public void setLocation(String location) {
-        this.location = location;
+        this.location.set(location);
     }
 
     public String getName() {
+        return name.get();
+    }
+
+    public SimpleStringProperty nameProperty() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     public Warehouse(int id, String location, String name) {
         this.id = id;
-        this.location = location;
-        this.name = name;
+        this.location =  new SimpleStringProperty(location);
+        this.name = new SimpleStringProperty(name);
     }
      public Warehouse() {
     }
 
     @Override
     public String toString() {
-        return name;
+        return name.get();
     }
 }

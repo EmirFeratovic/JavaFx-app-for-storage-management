@@ -15,12 +15,13 @@ public class addeditControllerWarehouse {
     public Button warehouseok_btn;
     public Button warehoucecancel_btn;
     private Warehouse warehouse;
-    private ObservableList<Warehouse> warehouses;
 
     @FXML
     public void initialize() {
+        if(warehouse != null) {
         warehsnameAddEdit_fld.setText(warehouse.getName());
         warehslocAddEdit_fld.setText(warehouse.getLocation());
+        }
     }
 
     public addeditControllerWarehouse (Warehouse warehouse) {
@@ -42,5 +43,7 @@ public class addeditControllerWarehouse {
         stage.close();
     }
 
-    
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
 }
