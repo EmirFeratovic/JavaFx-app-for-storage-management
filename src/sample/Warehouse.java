@@ -36,4 +36,9 @@ public class Warehouse {
     }
      public Warehouse() {
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

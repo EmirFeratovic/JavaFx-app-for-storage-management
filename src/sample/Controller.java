@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
+
 public class Controller {
 
     public TableView<Warehouse> warehouse_tbl;
@@ -51,6 +52,7 @@ public class Controller {
     public Button item_addbtn;
     public Button item_editbtn;
     public Button item_deletebtn;
+    public StorageDAOdb dao;
     ArrayList<Warehouse> arrayList = new ArrayList<>();
     ArrayList<StorageItem> arrayList2 = new ArrayList<>();
     ArrayList<Item> arrayList3=new ArrayList<>();
@@ -71,17 +73,17 @@ public class Controller {
         warehouse_name_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         warehouse_loc_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocation()));
 
-        Item storageitem = new Item();
+        Item item = new Item();
         ArrayList<StorageItem> arrayList2 = new ArrayList<>();
-        storageitem.setId(1);
-        storageitem.setDescription("8GB,DVI,VGA");
-        storageitem.setName("Nvidia GTX 1050");
-        storageitem.setWeight(450);
-        storageitem.setPrice(600);
+        item.setId(1);
+        item.setDescription("8GB,DVI,VGA");
+        item.setName("Nvidia GTX 1050");
+        item.setWeight(450);
+        item.setPrice(600);
         StorageItem storageItem = new StorageItem();
         storageItem.setId(1);
-        storageItem.setItem(storageitem);
-        storageItem.setPricePerItem(storageitem.getPrice());
+        storageItem.setItem(item);
+        storageItem.setPricePerItem(item.getPrice());
         storageItem.setQuantity(5);
         storageItem.setTotalPrice(storageItem.getQuantity() * storageItem.getPricePerItem());
         storageItem.setWarehouse(warehouse);
@@ -95,13 +97,13 @@ public class Controller {
         storage_qyt_col.setCellValueFactory((new PropertyValueFactory("quantity")));
         storage_totprice_col.setCellValueFactory((new PropertyValueFactory("totalPrice")));
 
-        Item item = new Item();
-        item.setId(1);
-        item.setPrice(450);
-        item.setWeight(0.6);
-        item.setName("AMD FX8120");
-        item.setDescription("8 core, 3.1ghz, 250");
-        arrayList3.add(item);
+        Item item3 = new Item();
+        item3.setId(1);
+        item3.setPrice(450);
+        item3.setWeight(0.6);
+        item3.setName("AMD FX8120");
+        item3.setDescription("8 core, 3.1ghz, 250");
+        arrayList3.add(item3);
         ObservableList<Item> items = FXCollections.observableArrayList(arrayList3);
         item_list.setItems(items);
 
@@ -125,6 +127,8 @@ public class Controller {
             }
         });
 
+
+
     }
 
     public void warehoseadd_action(ActionEvent actionEvent) {
@@ -134,7 +138,7 @@ public class Controller {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditWarehouse.fxml"));
-            addeditControllerWarehouse warehouseController = new addeditControllerWarehouse();
+            addeditControllerWarehouse warehouseController = new addeditControllerWarehouse(null);
             loader.setController(warehouseController);
             root = loader.load();
             stage.setTitle("Warehouse");
@@ -151,12 +155,13 @@ public class Controller {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditWarehouse.fxml"));
-            addeditControllerWarehouse warehouseController = new addeditControllerWarehouse();
+            addeditControllerWarehouse warehouseController = new addeditControllerWarehouse(warehouse_tbl.getSelectionModel().getSelectedItem());
             loader.setController(warehouseController);
             root = loader.load();
             stage.setTitle("Warehouse");
             stage.setScene(new Scene(root));
             stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -217,7 +222,7 @@ public class Controller {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditStorage.fxml"));
-            addeditControllerStorage storageController = new addeditControllerStorage();
+            addeditControllerStorage storageController = new addeditControllerStorage(null);
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");
@@ -230,13 +235,13 @@ public class Controller {
 
 
     public void storageedit_action(ActionEvent actionEvent) {
-        //if (patientsList.isEmpty()) return;
+        if (storage_tbl.getSelectionModel().getSelectedItem() == null) return;
         Stage stage = new Stage();
         stage.setResizable(false);
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditStorage.fxml"));
-            addeditControllerStorage storageController = new addeditControllerStorage();
+            addeditControllerStorage storageController = new addeditControllerStorage(storage_tbl.getSelectionModel().getSelectedItem());
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");

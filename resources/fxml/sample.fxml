@@ -143,8 +143,8 @@
                         <TableView fx:id="storage_tbl" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="storage_id_col" prefWidth="75.0" text="ID" />
-                            <TableColumn fx:id="storage_loc_col" prefWidth="75.0" text="Location" />
-                              <TableColumn fx:id="storage_item_col" prefWidth="120.0" text="Item" />
+                            <TableColumn fx:id="storage_loc_col" text="Warehouse" />
+                              <TableColumn fx:id="storage_item_col" prefWidth="116.0" text="Item" />
                               <TableColumn fx:id="storage_qyt_col" prefWidth="75.0" text="Quantity" />
                               <TableColumn fx:id="storage_ppi_col" prefWidth="100.0" text="Price per item" />
                               <TableColumn fx:id="storage_totprice_col" prefWidth="100.0" text="Total price" />
