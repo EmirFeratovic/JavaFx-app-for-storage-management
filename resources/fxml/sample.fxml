@@ -22,228 +22,220 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.999-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-        <tabs>
-          <Tab fx:id="warehouse_tab" text="Warehouses">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <top>
-                        <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Button fx:id="warehouse_addbtn" mnemonicParsing="false" onAction="#warehoseadd_action" prefWidth="25.0" textAlignment="CENTER">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                                 <graphic>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../addicon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Button>
-                              <Button fx:id="warehouse_editbtn" mnemonicParsing="false" onAction="#warehouseedit_action" prefWidth="25.0">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                                 <graphic>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../editicon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                              <Button fx:id="warehouse_deletebtn" mnemonicParsing="false" onAction="#warehousedelete_action" prefWidth="25.0">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                                 <graphic>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../deleteicon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                           <BorderPane.margin>
-                              <Insets bottom="2.0" top="2.0" />
-                           </BorderPane.margin></HBox>
-                     </top>
-                     <center>
-                        <TableView fx:id="warehouse_tbl" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                          <columns>
-                            <TableColumn fx:id="warehouse_id_col" prefWidth="75.0" text="ID" />
-                            <TableColumn fx:id="warehouse_loc_col" prefWidth="75.0" text="Location" />
-                              <TableColumn fx:id="warehouse_name_col" prefWidth="75.0" text="Name" />
-                          </columns>
-                        </TableView>
-                     </center></BorderPane>
-               </content>
-          </Tab>
-            <Tab fx:id="storage_tab" text="Storage">
-               <content>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <top>
-                        <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <TextField fx:id="search_fld" promptText="Search...">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin></TextField>
-                              <ChoiceBox fx:id="locations_cb" prefWidth="150.0">
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin></ChoiceBox>
-                              <Button fx:id="storage_addbtn" mnemonicParsing="false" onAction="#storageadd_action" prefWidth="25.0">
-                                 <graphic>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../addicon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="storage_editbtn" mnemonicParsing="false" onAction="#storageedit_action" prefWidth="25.0">
-                                 <graphic>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../editicon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="storage_deletebtn" mnemonicParsing="false" onAction="#storagedelete_action" prefWidth="25.0">
-                                 <graphic>
-                                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../deleteicon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <HBox.margin>
-                                    <Insets left="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                           </children>
-                           <BorderPane.margin>
-                              <Insets bottom="2.0" top="2.0" />
-                           </BorderPane.margin></HBox>
-                     </top>
-                     <center>
-                        <TableView fx:id="storage_tbl" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                          <columns>
-                            <TableColumn fx:id="storage_id_col" prefWidth="75.0" text="ID" />
-                            <TableColumn fx:id="storage_loc_col" text="Warehouse" />
-                              <TableColumn fx:id="storage_item_col" prefWidth="116.0" text="Item" />
-                              <TableColumn fx:id="storage_qyt_col" prefWidth="75.0" text="Quantity" />
-                              <TableColumn fx:id="storage_ppi_col" prefWidth="100.0" text="Price per item" />
-                              <TableColumn fx:id="storage_totprice_col" prefWidth="100.0" text="Total price" />
-                          </columns>
-                        </TableView>
-                     </center></BorderPane>
-               </content>
-            </Tab>
-          <Tab fx:id="item_tab" text="Item list">
-               <content>
-                  <BorderPane>
-                     <center>
-                        <GridPane alignment="CENTER" BorderPane.alignment="CENTER">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <ListView fx:id="item_list" prefHeight="200.0" prefWidth="200.0" GridPane.rowSpan="2147483647">
-                                 <GridPane.margin>
-                                    <Insets bottom="2.0" left="10.0" right="10.0" top="2.0" />
-                                 </GridPane.margin>
-                              </ListView>
-                              <Label text="Name:" GridPane.columnIndex="1" />
-                              <Label text="Description:" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin></Label>
-                              <Label text="Price:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label text="Weight:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <TextField fx:id="fld_name" GridPane.columnIndex="2">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin></TextField>
-                              <TextField fx:id="price_fld" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin></TextField>
-                              <TextField fx:id="weight_fld" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin>
-                              </TextField>
-                              <TextArea fx:id="desc_textarea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin>
-                              </TextArea>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                                 <children>
-                                    <Button fx:id="item_addbtn" mnemonicParsing="false" onAction="#itemadd_action" prefWidth="25.0" textAlignment="CENTER">
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../addicon.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
-                                    </Button>
-                                    <Button fx:id="item_deletebtn" mnemonicParsing="false" onAction="#itemdelete_action" prefWidth="25.0">
-                                       <HBox.margin>
-                                          <Insets left="10.0" />
-                                       </HBox.margin>
-                                       <graphic>
-                                          <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../deleteicon.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                                 <GridPane.margin>
-                                    <Insets right="10.0" />
-                                 </GridPane.margin>
-                              </HBox>
-                           </children>
-                           <BorderPane.margin>
-                              <Insets bottom="2.0" top="2.0" />
-                           </BorderPane.margin>
-                        </GridPane>
-                     </center>
-                  </BorderPane>
-               </content></Tab>
-        </tabs>
+         <Tab fx:id="warehouse_tab" text="Warehouses">
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <top>
+                  <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="2.0" top="2.0"/>
+                     </BorderPane.margin>
+                     <Button fx:id="warehouse_addbtn" mnemonicParsing="false" onAction="#warehoseadd_action"
+                             prefWidth="25.0" textAlignment="CENTER">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                        <graphic>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../addicon.png"/>
+                           </ImageView>
+                        </graphic>
+                        <opaqueInsets>
+                           <Insets/>
+                        </opaqueInsets>
+                     </Button>
+                     <Button fx:id="warehouse_editbtn" mnemonicParsing="false" onAction="#warehouseedit_action"
+                             prefWidth="25.0">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                        <graphic>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../editicon.png"/>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <Button fx:id="warehouse_deletebtn" mnemonicParsing="false"
+                             onAction="#warehousedelete_action" prefWidth="25.0">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                        <graphic>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../deleteicon.png"/>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                  </HBox>
+               </top>
+               <center>
+                  <TableView fx:id="warehouse_tbl" prefHeight="200.0" prefWidth="200.0"
+                             BorderPane.alignment="CENTER">
+                     <columns>
+                        <TableColumn fx:id="warehouse_id_col" minWidth="50.0" prefWidth="-1.0" text="ID"/>
+                        <TableColumn fx:id="warehouse_loc_col" minWidth="200.0" prefWidth="-1.0" text="Location"/>
+                        <TableColumn fx:id="warehouse_name_col" minWidth="200.0" prefWidth="-1.0" text="Name"/>
+                     </columns>
+                  </TableView>
+               </center>
+            </BorderPane>
+         </Tab>
+         <Tab fx:id="storage_tab" text="Storage">
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <top>
+                  <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="2.0" top="2.0"/>
+                     </BorderPane.margin>
+                     <TextField fx:id="search_fld" promptText="Search...">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </TextField>
+                     <ChoiceBox fx:id="locations_cb" prefWidth="150.0">
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </ChoiceBox>
+                     <Button fx:id="storage_addbtn" mnemonicParsing="false" onAction="#storageadd_action"
+                             prefWidth="25.0">
+                        <graphic>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../addicon.png"/>
+                           </ImageView>
+                        </graphic>
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </Button>
+                     <Button fx:id="storage_editbtn" mnemonicParsing="false" onAction="#storageedit_action"
+                             prefWidth="25.0">
+                        <graphic>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../editicon.png"/>
+                           </ImageView>
+                        </graphic>
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </Button>
+                     <Button fx:id="storage_deletebtn" mnemonicParsing="false" onAction="#storagedelete_action"
+                             prefWidth="25.0">
+                        <graphic>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../deleteicon.png"/>
+                           </ImageView>
+                        </graphic>
+                        <HBox.margin>
+                           <Insets left="10.0"/>
+                        </HBox.margin>
+                     </Button>
+                  </HBox>
+               </top>
+               <center>
+                  <TableView fx:id="storage_tbl" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <columns>
+                        <TableColumn fx:id="storage_id_col" minWidth="50.0" prefWidth="-1.0" text="ID"/>
+                        <TableColumn fx:id="storage_loc_col" minWidth="100.0" prefWidth="-1.0" text="Warehouse"/>
+                        <TableColumn fx:id="storage_item_col" minWidth="250.0" prefWidth="-1.0" text="Item"/>
+                        <TableColumn fx:id="storage_qyt_col" prefWidth="75.0" text="Quantity"/>
+                        <TableColumn fx:id="storage_ppi_col" prefWidth="100.0" text="Price per item"/>
+                        <TableColumn fx:id="storage_totprice_col" prefWidth="100.0" text="Total price"/>
+                     </columns>
+                  </TableView>
+               </center>
+            </BorderPane>
+         </Tab>
+         <Tab fx:id="item_tab" text="Item list">
+            <BorderPane>
+               <center>
+                  <GridPane alignment="CENTER" BorderPane.alignment="CENTER">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                     </rowConstraints>
+                     <BorderPane.margin>
+                        <Insets bottom="2.0" top="2.0"/>
+                     </BorderPane.margin>
+                     <ListView fx:id="item_list" prefHeight="200.0" prefWidth="200.0"
+                               GridPane.rowSpan="2147483647">
+                        <GridPane.margin>
+                           <Insets bottom="2.0" left="10.0" right="10.0" top="2.0"/>
+                        </GridPane.margin>
+                     </ListView>
+                     <Label text="Name:" GridPane.columnIndex="1"/>
+                     <Label text="Description:" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <GridPane.margin>
+                           <Insets right="10.0"/>
+                        </GridPane.margin>
+                     </Label>
+                     <Label text="Price:" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                     <Label text="Weight:" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                     <TextField fx:id="fld_name" GridPane.columnIndex="2">
+                        <GridPane.margin>
+                           <Insets right="10.0"/>
+                        </GridPane.margin>
+                     </TextField>
+                     <TextField fx:id="price_fld" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <GridPane.margin>
+                           <Insets right="10.0"/>
+                        </GridPane.margin>
+                     </TextField>
+                     <TextField fx:id="weight_fld" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <GridPane.margin>
+                           <Insets right="10.0"/>
+                        </GridPane.margin>
+                     </TextField>
+                     <TextArea fx:id="desc_textarea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2"
+                               GridPane.rowIndex="3">
+                        <GridPane.margin>
+                           <Insets right="10.0"/>
+                        </GridPane.margin>
+                     </TextArea>
+                     <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0" GridPane.columnIndex="2"
+                           GridPane.rowIndex="4">
+                        <GridPane.margin>
+                           <Insets right="10.0"/>
+                        </GridPane.margin>
+                        <Button fx:id="item_addbtn" mnemonicParsing="false" onAction="#itemadd_action"
+                                prefWidth="25.0" textAlignment="CENTER">
+                           <HBox.margin>
+                              <Insets left="10.0"/>
+                           </HBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true"
+                                         preserveRatio="true">
+                                 <Image url="@../addicon.png"/>
+                              </ImageView>
+                           </graphic>
+                           <opaqueInsets>
+                              <Insets/>
+                           </opaqueInsets>
+                        </Button>
+                        <Button fx:id="item_deletebtn" mnemonicParsing="false" onAction="#itemdelete_action"
+                                prefWidth="25.0">
+                           <HBox.margin>
+                              <Insets left="10.0"/>
+                           </HBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true"
+                                         preserveRatio="true">
+                                 <Image url="@../deleteicon.png"/>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </HBox>
+                  </GridPane>
+               </center>
+            </BorderPane>
+         </Tab>
       </TabPane>
    </center>
 </BorderPane>

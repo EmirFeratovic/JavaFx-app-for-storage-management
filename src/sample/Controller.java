@@ -55,16 +55,13 @@ public class Controller {
     public Button item_addbtn;
     public Button item_editbtn;
     public Button item_deletebtn;
-    public StorageDAOdb dao;
-    ArrayList<Warehouse> arrayList = new ArrayList<>();
-    ArrayList<StorageItem> arrayList2 = new ArrayList<>();
-    ArrayList<Item> arrayList3=new ArrayList<>();
-    Warehouse warehouseAll = new Warehouse(-1, "All", "All");
+    private StorageDAOdb dao;
+    private Warehouse warehouseAll = new Warehouse(-1, "All", "All");
     private ObservableList<Warehouse> warehouses;
     private ObservableList<StorageItem> storageItems;
     private ObservableList<Item> items;
     private ObservableList<Warehouse> filtered;
-    ObservableList<StorageItem> storageItems2;
+    private ObservableList<StorageItem> storageItems2;
 
     public Controller() {
         this.dao = StorageDAOdb.getInstance();
@@ -72,11 +69,6 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        Warehouse warehouse = new Warehouse();
-        warehouse.setId(1);
-        warehouse.setLocation("Sarajevo");
-        warehouse.setName("SaTrade");
-        arrayList.add(warehouse);
         warehouses =  FXCollections.observableArrayList(dao.getWarehouses());
         filtered = FXCollections.observableArrayList(warehouses);
 
@@ -85,22 +77,6 @@ public class Controller {
         warehouse_name_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         warehouse_loc_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocation()));
 
-        Item item = new Item();
-        ArrayList<StorageItem> arrayList2 = new ArrayList<>();
-        item.setId(1);
-        item.setDescription("8GB,DVI,VGA");
-        item.setName("Nvidia GTX 1050");
-        item.setWeight(450);
-        item.setPrice(600);
-        arrayList3.add(item);
-        StorageItem storageItem = new StorageItem();
-        storageItem.setId(1);
-        storageItem.setItem(item);
-        storageItem.setPricePerItem(item.getPrice());
-        storageItem.setQuantity(5);
-        storageItem.setTotalPrice(storageItem.getQuantity() * storageItem.getPricePerItem());
-        storageItem.setWarehouse(warehouse);
-        arrayList2.add(storageItem);
         storageItems =  FXCollections.observableArrayList(dao.getStorages());
         storage_tbl.setItems(storageItems);
         storage_id_col.setCellValueFactory(new PropertyValueFactory("id"));
@@ -110,13 +86,6 @@ public class Controller {
         storage_qyt_col.setCellValueFactory((new PropertyValueFactory("quantity")));
         storage_totprice_col.setCellValueFactory((new PropertyValueFactory("totalPrice")));
 
-        Item item3 = new Item();
-        item3.setId(1);
-        item3.setPrice(450);
-        item3.setWeight(0.6);
-        item3.setName("AMD FX8120");
-        item3.setDescription("8 core, 3.1ghz, 250");
-        arrayList3.add(item3);
         items = FXCollections.observableArrayList(dao.getItems());
         item_list.setItems(items);
 
@@ -174,13 +143,18 @@ public class Controller {
     });
         fld_name.textProperty().addListener((observableValue, s, t1) -> {
             item_list.getSelectionModel().getSelectedItem().setName(t1);
+            dao.editItem(item_list.getSelectionModel().getSelectedItem());
             item_list.refresh();
             storage_tbl.refresh();
         });
+
+        price_fld.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
+        weight_fld.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
+        desc_textarea.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
+
     }
 
     public void warehoseadd_action(ActionEvent actionEvent) {
-        //if (patientsList.isEmpty()) return;
         Stage stage = new Stage();
         stage.setResizable(false);
         Parent root;
@@ -195,7 +169,6 @@ public class Controller {
             stage.setOnHiding(event -> {
                 Warehouse warehouse = warehouseController.getWarehouse();
                 if (warehouse != null) {
-                    arrayList.add(warehouse);
                     dao.addWarehouse(warehouse);
                     warehouses.add(warehouse);
                     filtered.add(warehouse);
@@ -223,7 +196,7 @@ public class Controller {
             stage.setOnHiding(event -> {
                 Warehouse warehouse = warehouseController.getWarehouse();
                 if (warehouse != null) {
-                    //warehouses.add(warehouse);
+                    dao.editWarehouse(warehouse);
                     filtered.setAll(warehouses);
                     filtered.add(warehouseAll);
                     storage_tbl.refresh();
@@ -248,9 +221,13 @@ public class Controller {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            arrayList.remove(warehouse);
+            dao.deleteStorageByWarehouse(warehouse);
+            dao.deleteWarehouse(warehouse);
             filtered.remove(warehouse);
             warehouses.remove(warehouse_tbl.getSelectionModel().getSelectedItem());
+            storageItems = FXCollections.observableArrayList(dao.getStorages());
+            storage_tbl.setItems(storageItems);
+            storage_tbl.refresh();
             warehouse_tbl.refresh();
         }
     }
@@ -261,7 +238,7 @@ public class Controller {
         items.add(new Item());
         item_list.refresh();
         item_list.getSelectionModel().selectLast();
-        arrayList3.add(item_list.getSelectionModel().getSelectedItem());
+        dao.addItem(item_list.getSelectionModel().getSelectedItem());
     }
 
     public void itemdelete_action(ActionEvent actionEvent) {
@@ -276,14 +253,17 @@ public class Controller {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            arrayList3.remove(item_list.getSelectionModel().getSelectedItem());
+            dao.deleteStorageByItem(item);
+            dao.deleteItem(item);
             items.removeAll(item);
+            storageItems = FXCollections.observableArrayList(dao.getStorages());
+            storage_tbl.setItems(storageItems);
+            storage_tbl.refresh();
             item_list.refresh();
         }
     }
 
     public void storageadd_action() {
-        //if (patientsList.isEmpty()) return;
         Stage stage = new Stage();
         stage.setResizable(false);
         Parent root;
@@ -298,6 +278,7 @@ public class Controller {
             stage.setOnHiding(event -> {
                 StorageItem storageItem = storageController.getStorageItem();
                 if (storageItem != null) {
+                    dao.addStorage(storageItem);
                     storageItems.add(storageItem);
                     locations_cb.getSelectionModel().selectFirst();
                     locations_cb.getSelectionModel().selectLast();
@@ -327,6 +308,7 @@ public class Controller {
             stage.setOnHiding(event -> {
                 StorageItem storageItem = storageController.getStorageItem();
                 if (storageItem != null) {
+                    dao.editStorage(storageItem);
                     storage_tbl.refresh();
                 }
             });
@@ -347,7 +329,7 @@ public class Controller {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            arrayList2.remove(storage);
+            dao.deleteStorage(storage);
             storageItems.removeAll(storage);
             locations_cb.getSelectionModel().selectFirst();
             locations_cb.getSelectionModel().selectLast();

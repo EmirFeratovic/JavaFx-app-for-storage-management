@@ -5,9 +5,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Item {
+    private StorageDAOdb dao = StorageDAOdb.getInstance();
     private int id;
-    private SimpleStringProperty name = new SimpleStringProperty() , description = new SimpleStringProperty();
-    private SimpleDoubleProperty price= new SimpleDoubleProperty(), weight = new SimpleDoubleProperty();
+    private SimpleStringProperty name, description;
+    private SimpleDoubleProperty price, weight;
 
     public int getId() {
         return id;
@@ -74,6 +75,11 @@ public class Item {
     }
 
     public Item() {
+        this.id =dao.nextItemId();
+        this.name = new SimpleStringProperty("");
+        this.description = new SimpleStringProperty("");
+        this.price = new SimpleDoubleProperty(0);
+        this.weight = new SimpleDoubleProperty(0);
     }
 
     @Override

@@ -1,13 +1,14 @@
 package sample;
 
 public class StorageItem {
-
-    int id,quantity;
-    Warehouse warehouse;
-    double pricePerItem,totalPrice;
-    Item item;
+    private StorageDAOdb dao = StorageDAOdb.getInstance();
+    private int id,quantity;
+    private Warehouse warehouse;
+    private double pricePerItem,totalPrice;
+    private Item item;
 
     public StorageItem() {
+        this.id = dao.nextStorageId();
     }
 
     public StorageItem(int id, Warehouse warehouse, int quantity, double pricePerItem, double totalPrice, Item item) {

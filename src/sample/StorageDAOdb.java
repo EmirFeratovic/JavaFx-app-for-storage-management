@@ -23,6 +23,10 @@ public class StorageDAOdb implements StorageDAO {
     private PreparedStatement deleteWarehouseStm;
     private PreparedStatement deleteStorageStm;
     private PreparedStatement nextWarehouseIdStm;
+    private PreparedStatement nextItemIdStm;
+    private PreparedStatement nextStorageIdStm;
+    private PreparedStatement deleteStorageByItemStm;
+    private PreparedStatement deleteStorageByWarehouseStm;
 
 
     private StorageDAOdb() {
@@ -36,6 +40,18 @@ public class StorageDAOdb implements StorageDAO {
             getStorageStm = connection.prepareStatement("SELECT * FROM storage WHERE id = ?");
             nextWarehouseIdStm = connection.prepareStatement("SELECT MAX(id) + 1 FROM warehouses");
             addWarehouseStm = connection.prepareStatement("INSERT INTO warehouses VALUES (?,?,?)");
+            editWarehouseStm = connection.prepareStatement("UPDATE warehouses SET name = ?, location = ? WHERE  id = ?");
+            deleteWarehouseStm = connection.prepareStatement("DELETE FROM warehouses WHERE id = ?");
+            nextItemIdStm = connection.prepareStatement("SELECT MAX(id) + 1 FROM items");
+            nextStorageIdStm = connection.prepareStatement("SELECT MAX(id) + 1 FROM storage");
+            deleteItemStm =connection.prepareStatement("DELETE FROM items WHERE id = ?");
+            editItemStm = connection.prepareStatement("UPDATE items SET name = ?, description = ?, price = ?, weight = ? WHERE  id = ?");
+            addItemStm = connection.prepareStatement("INSERT INTO items VALUES (?,?,?,?,?)");
+            deleteStorageStm = connection.prepareStatement("DELETE FROM storage WHERE id = ?");
+            addStorageStm = connection.prepareStatement("INSERT INTO storage VALUES (?,?,?,?)");
+            deleteStorageByItemStm = connection.prepareStatement("DELETE FROM storage WHERE item = ?");
+            deleteStorageByWarehouseStm = connection.prepareStatement("DELETE FROM storage WHERE warehouse = ?");
+            editStorageStm = connection.prepareStatement("UPDATE storage SET warehouse = ?, item = ?, quantity = ? WHERE id = ?");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,7 +162,23 @@ public class StorageDAOdb implements StorageDAO {
 
     @Override
     public void addItem(Item item) {
+        try {
+            ResultSet rs = nextItemIdStm.executeQuery();
+            int id = 1;
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
 
+            addItemStm.setInt(1, id);
+            addItemStm.setString(2, item.getName());
+            addItemStm.setString(3, item.getDescription());
+            addItemStm.setDouble(4, item.getPrice());
+            addItemStm.setDouble(5, item.getWeight());
+            addItemStm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -170,37 +202,93 @@ public class StorageDAOdb implements StorageDAO {
 
     @Override
     public void addStorage(StorageItem storage) {
+        try {
+            ResultSet rs = nextStorageIdStm.executeQuery();
+            int id = 1;
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
 
+            addStorageStm.setInt(1, id);
+            addStorageStm.setInt(2, storage.getWarehouse().getId());
+            addStorageStm.setInt(3, storage.getItem().getId());
+            addStorageStm.setInt(4, storage.getQuantity());
+            addStorageStm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void editItem(Item item) {
-
+        try {
+            editItemStm.setString(1, item.getName());
+            editItemStm.setString(2, item.getDescription());
+            editItemStm.setDouble(3, item.getPrice());
+            editItemStm.setDouble(4, item.getWeight());
+            editItemStm.setInt(5, item.getId());
+            editItemStm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void editWarehouse(Warehouse warehouse) {
-
+        try {
+            editWarehouseStm.setString(1, warehouse.getName());
+            editWarehouseStm.setString(2, warehouse.getLocation());
+            editWarehouseStm.setInt(3, warehouse.getId());
+            editWarehouseStm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void editStorage(StorageItem storage) {
-
+        try {
+            editStorageStm.setInt(1, storage.getWarehouse().getId());
+            editStorageStm.setInt(2, storage.getItem().getId());
+            editStorageStm.setInt(3, storage.getQuantity());
+            editStorageStm.setInt(4, storage.getId());
+            editStorageStm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void deleteItem(Item item) {
-
+        try {
+            deleteItemStm.setInt(1, item.getId());
+            deleteItemStm.executeUpdate();
+            //deleteAppointmentByPatient(patient);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void deleteWarehouse(Warehouse warehouse) {
-
+            try {
+                deleteWarehouseStm.setInt(1, warehouse.getId());
+                deleteWarehouseStm.executeUpdate();
+                //deleteAppointmentByPatient(patient);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
     }
 
     @Override
     public void deleteStorage(StorageItem storage) {
-
+        try {
+            deleteStorageStm.setInt(1, storage.getId());
+            deleteStorageStm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -223,4 +311,49 @@ public class StorageDAOdb implements StorageDAO {
         instance=null;
     }
 
+    public int nextItemId() {
+        ResultSet rs;
+        int id = 1;
+        try {
+            rs = nextItemIdStm.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public int nextStorageId() {
+        ResultSet rs;
+        int id = 1;
+        try {
+            rs = nextStorageIdStm.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public void deleteStorageByItem(Item item) {
+        try {
+            deleteStorageByItemStm.setInt(1, item.getId());
+            deleteStorageByItemStm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteStorageByWarehouse(Warehouse warehouse) {
+        try {
+            deleteStorageByWarehouseStm.setInt(1, warehouse.getId());
+            deleteStorageByWarehouseStm.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
