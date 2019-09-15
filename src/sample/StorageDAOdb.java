@@ -264,7 +264,6 @@ public class StorageDAOdb implements StorageDAO {
         try {
             deleteItemStm.setInt(1, item.getId());
             deleteItemStm.executeUpdate();
-            //deleteAppointmentByPatient(patient);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -275,7 +274,6 @@ public class StorageDAOdb implements StorageDAO {
             try {
                 deleteWarehouseStm.setInt(1, warehouse.getId());
                 deleteWarehouseStm.executeUpdate();
-                //deleteAppointmentByPatient(patient);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
