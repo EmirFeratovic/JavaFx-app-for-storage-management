@@ -59,11 +59,16 @@ public class Controller {
     ArrayList<Warehouse> arrayList = new ArrayList<>();
     ArrayList<StorageItem> arrayList2 = new ArrayList<>();
     ArrayList<Item> arrayList3=new ArrayList<>();
+    Warehouse warehouseAll = new Warehouse(-1, "All", "All");
     private ObservableList<Warehouse> warehouses;
     private ObservableList<StorageItem> storageItems;
     private ObservableList<Item> items;
     private ObservableList<Warehouse> filtered;
+    ObservableList<StorageItem> storageItems2;
 
+    public Controller() {
+        this.dao = StorageDAOdb.getInstance();
+    }
 
     @FXML
     public void initialize() {
@@ -72,7 +77,8 @@ public class Controller {
         warehouse.setLocation("Sarajevo");
         warehouse.setName("SaTrade");
         arrayList.add(warehouse);
-        warehouses =  FXCollections.observableArrayList(arrayList);
+        warehouses =  FXCollections.observableArrayList(dao.getWarehouses());
+        filtered = FXCollections.observableArrayList(warehouses);
 
         warehouse_tbl.setItems(warehouses);
         warehouse_id_col.setCellValueFactory(new PropertyValueFactory("id"));
@@ -95,7 +101,7 @@ public class Controller {
         storageItem.setTotalPrice(storageItem.getQuantity() * storageItem.getPricePerItem());
         storageItem.setWarehouse(warehouse);
         arrayList2.add(storageItem);
-        storageItems =  FXCollections.observableArrayList(arrayList2);
+        storageItems =  FXCollections.observableArrayList(dao.getStorages());
         storage_tbl.setItems(storageItems);
         storage_id_col.setCellValueFactory(new PropertyValueFactory("id"));
         storage_item_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getItem().getName()));
@@ -111,7 +117,7 @@ public class Controller {
         item3.setName("AMD FX8120");
         item3.setDescription("8 core, 3.1ghz, 250");
         arrayList3.add(item3);
-        items = FXCollections.observableArrayList(arrayList3);
+        items = FXCollections.observableArrayList(dao.getItems());
         item_list.setItems(items);
 
         item_list.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -134,29 +140,43 @@ public class Controller {
             }
             item_list.refresh();
             storage_tbl.refresh();
-        });
 
-        filtered = FXCollections.observableArrayList(warehouses);
-        Warehouse warehouse2 = new Warehouse(-1, "All", "All");
-        filtered.add(warehouse2);
+        });
+            search_fld.textProperty().addListener((observableValue1, s, t1) -> {
+                ArrayList<StorageItem> filter = new ArrayList<>();
+                for (StorageItem stIt: storageItems) {
+                    if(stIt.getItem().getName().toLowerCase().contains(t1.toLowerCase())&& (stIt.getWarehouse().getId() == locations_cb.getSelectionModel().getSelectedItem().getId() || locations_cb.getSelectionModel().getSelectedItem().getId() == -1)){
+                        filter.add(stIt);
+                    }
+                }
+                ObservableList<StorageItem> filtered = FXCollections.observableArrayList(filter);
+                storage_tbl.setItems(filtered);
+                storage_tbl.refresh();
+            });
+
+
+        filtered.add(warehouseAll);
+
         locations_cb.setItems(filtered);
-        locations_cb.getSelectionModel().select(warehouse2);
+        locations_cb.getSelectionModel().select(warehouseAll);
 
         locations_cb.getSelectionModel().selectedItemProperty().addListener((observableValue, warehouse1, t1) -> {
-            // NE RADI NE STAVLJA NOVI WAREHOUSE U COMBOBOX IZ NEKOG RAZLOGA
             ArrayList<StorageItem> filter = new ArrayList<>();
-            if(!filtered.contains(warehouse2))filtered.add(warehouse2);
             for (StorageItem stIt: storageItems) {
-                if(stIt.getWarehouse().getId()==locations_cb.getSelectionModel().getSelectedItem().getId()) {
+                if(locations_cb.getSelectionModel().getSelectedItem().getId() == -1 || stIt.getWarehouse().getId()==locations_cb.getSelectionModel().getSelectedItem().getId()) {
                     filter.add(stIt);
                 }
             }
+            storageItems2 = FXCollections.observableArrayList(filter);
 
-            ObservableList<StorageItem> storageItems2 = FXCollections.observableArrayList(filter);
-            if(locations_cb.getSelectionModel().getSelectedItem().equals(warehouse2)) storageItems2 = FXCollections.observableArrayList(storageItems);
             storage_tbl.setItems(storageItems2);
             storage_tbl.refresh();
     });
+        fld_name.textProperty().addListener((observableValue, s, t1) -> {
+            item_list.getSelectionModel().getSelectedItem().setName(t1);
+            item_list.refresh();
+            storage_tbl.refresh();
+        });
     }
 
     public void warehoseadd_action(ActionEvent actionEvent) {
@@ -177,7 +197,7 @@ public class Controller {
                 if (warehouse != null) {
                     arrayList.add(warehouse);
                     warehouses.add(warehouse);
-                    filtered = FXCollections.observableArrayList(warehouses);
+                    filtered.add(warehouse);
                     warehouse_tbl.refresh();
                 }
             });
@@ -203,6 +223,9 @@ public class Controller {
                 Warehouse warehouse = warehouseController.getWarehouse();
                 if (warehouse != null) {
                     //warehouses.add(warehouse);
+                    filtered.setAll(warehouses);
+                    filtered.add(warehouseAll);
+                    storage_tbl.refresh();
                     warehouse_tbl.refresh();
                 }
             });
@@ -225,6 +248,7 @@ public class Controller {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
             arrayList.remove(warehouse);
+            filtered.remove(warehouse);
             warehouses.remove(warehouse_tbl.getSelectionModel().getSelectedItem());
             warehouse_tbl.refresh();
         }
@@ -256,9 +280,6 @@ public class Controller {
             item_list.refresh();
         }
     }
-    public void itemedit_action(ActionEvent actionEvent) {
-
-    }
 
     public void storageadd_action() {
         //if (patientsList.isEmpty()) return;
@@ -277,6 +298,9 @@ public class Controller {
                 StorageItem storageItem = storageController.getStorageItem();
                 if (storageItem != null) {
                     storageItems.add(storageItem);
+                    locations_cb.getSelectionModel().selectFirst();
+                    locations_cb.getSelectionModel().selectLast();
+                    locations_cb.getSelectionModel().select(warehouseAll);
                     storage_tbl.refresh();
                 }
             });
@@ -324,6 +348,9 @@ public class Controller {
         if (result.get() == ButtonType.OK){
             arrayList2.remove(storage);
             storageItems.removeAll(storage);
+            locations_cb.getSelectionModel().selectFirst();
+            locations_cb.getSelectionModel().selectLast();
+            locations_cb.getSelectionModel().select(warehouseAll);
             storage_tbl.refresh();
         }
     }
