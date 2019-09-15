@@ -22,6 +22,7 @@ public class StorageDAOdb implements StorageDAO {
     private PreparedStatement deleteItemStm;
     private PreparedStatement deleteWarehouseStm;
     private PreparedStatement deleteStorageStm;
+    private PreparedStatement nextWarehouseIdStm;
 
 
     private StorageDAOdb() {
@@ -33,13 +34,15 @@ public class StorageDAOdb implements StorageDAO {
             getWarehousesStm = connection.prepareStatement("SELECT * FROM warehouses");
             getStoragesStm = connection.prepareStatement("SELECT * FROM storage");
             getStorageStm = connection.prepareStatement("SELECT * FROM storage WHERE id = ?");
+            nextWarehouseIdStm = connection.prepareStatement("SELECT MAX(id) + 1 FROM warehouses");
+            addWarehouseStm = connection.prepareStatement("INSERT INTO warehouses VALUES (?,?,?)");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private StorageItem getStorageItemFromResultSet(ResultSet rs, Warehouse warehouse, Item item) throws SQLException {
-        return new StorageItem(rs.getInt(1), warehouse, rs.getInt(4), rs.getDouble(5), rs.getDouble(6), item);
+        return new StorageItem(rs.getInt(1), warehouse, rs.getInt(4), item.getPrice(), item.getPrice()*rs.getInt(4), item);
     }
 
     @Override
@@ -76,6 +79,19 @@ public class StorageDAOdb implements StorageDAO {
         }
     }
 
+    public int nextWarehouseId() {
+        ResultSet rs;
+        int id = 1;
+        try {
+            rs = nextWarehouseIdStm.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
     @Override
     public StorageItem getStorage(int id) {
         return null;
@@ -135,7 +151,21 @@ public class StorageDAOdb implements StorageDAO {
 
     @Override
     public void addWarehouse(Warehouse warehouse) {
+        try {
+            ResultSet rs = nextWarehouseIdStm.executeQuery();
+            int id = 1;
+            if (rs.next()) {
+                id = rs.getInt(1);
+            }
 
+            addWarehouseStm.setInt(1, id);
+            addWarehouseStm.setString(2, warehouse.getLocation());
+            addWarehouseStm.setString(3, warehouse.getName());
+            addWarehouseStm.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

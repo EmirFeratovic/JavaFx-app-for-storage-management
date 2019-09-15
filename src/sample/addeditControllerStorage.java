@@ -39,25 +39,25 @@ public class addeditControllerStorage {
     public void initialize() {
         item_cb.setItems(items);
         warehouse_cb.setItems(warehouses);
-        storagepricepi_fld.setText("0");
-        storageqty_fld.setText("0");
-        storagetotprice_fld.setText("0");
+        storagepricepi_fld.setText("1");
+        storageqty_fld.setText("1");
+        storagetotprice_fld.setText("1");
         storagetotprice_fld.setEditable(false);
             if(storageItem != null) {
                 warehouse_cb.getSelectionModel().select(storageItem.getWarehouse());
                 item_cb.getSelectionModel().select(storageItem.getItem());
-                storageqty_fld.setText(storageItem.getQuantity()+"");
-                storagepricepi_fld.setText(storageItem.getPricePerItem()+"");
-                storagetotprice_fld.setText(storageItem.getQuantity()*storageItem.getPricePerItem()+"");
+                storageqty_fld.setText(String.valueOf(storageItem.getQuantity()));
+                storagepricepi_fld.setText(String.valueOf(storageItem.getPricePerItem()));
+                storagetotprice_fld.setText(String.valueOf(storageItem.getQuantity()*storageItem.getPricePerItem()));
             }
 
 
         storagepricepi_fld.textProperty().addListener((observableValue, s, t1) -> {
-            storagetotprice_fld.setText(Integer.parseInt(t1)*Double.parseDouble(storagepricepi_fld.getText()) + "");
+                storagetotprice_fld.setText(String.valueOf(Integer.parseInt(storageqty_fld.getText())*Double.parseDouble(t1)));
         });
 
         storageqty_fld.textProperty().addListener((observableValue, s, t1) -> {
-            storagetotprice_fld.setText(Integer.parseInt(t1)*Double.parseDouble(storagepricepi_fld.getText()) + "");
+                storagetotprice_fld.setText(String.valueOf(Integer.parseInt(t1)*Double.parseDouble(storagepricepi_fld.getText())));
         });
     }
 

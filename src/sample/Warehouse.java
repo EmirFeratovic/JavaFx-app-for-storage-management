@@ -3,6 +3,7 @@ package sample;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Warehouse {
+    private StorageDAOdb dao = StorageDAOdb.getInstance();
     private int id;
     private SimpleStringProperty location = new SimpleStringProperty("");
     private SimpleStringProperty name = new SimpleStringProperty("");
@@ -45,6 +46,9 @@ public class Warehouse {
         this.name = new SimpleStringProperty(name);
     }
      public Warehouse() {
+        this.id = dao.nextWarehouseId();
+        this.name = new SimpleStringProperty("");
+        this.location = new SimpleStringProperty("");
     }
 
     @Override

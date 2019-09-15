@@ -196,6 +196,7 @@ public class Controller {
                 Warehouse warehouse = warehouseController.getWarehouse();
                 if (warehouse != null) {
                     arrayList.add(warehouse);
+                    dao.addWarehouse(warehouse);
                     warehouses.add(warehouse);
                     filtered.add(warehouse);
                     warehouse_tbl.refresh();
@@ -288,7 +289,7 @@ public class Controller {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditStorage.fxml"));
-            addeditControllerStorage storageController = new addeditControllerStorage(null, arrayList3,arrayList);
+            addeditControllerStorage storageController = new addeditControllerStorage(null, dao.getItems(), dao.getWarehouses());
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");
@@ -317,7 +318,7 @@ public class Controller {
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditStorage.fxml"));
-            addeditControllerStorage storageController = new addeditControllerStorage(storage_tbl.getSelectionModel().getSelectedItem(), arrayList3,arrayList);
+            addeditControllerStorage storageController = new addeditControllerStorage(storage_tbl.getSelectionModel().getSelectedItem(), dao.getItems(),dao.getWarehouses());
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");
