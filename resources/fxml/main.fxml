@@ -52,11 +52,6 @@
                            </ImageView>
                         </graphic>
                      </Button>
-                     <Button mnemonicParsing="false" onAction="#generateReportAction" text="Button">
-                        <HBox.margin>
-                           <Insets left="10.0" />
-                        </HBox.margin>
-                     </Button>
                      <Button fx:id="warehouse_deletebtn" mnemonicParsing="false" onAction="#warehousedelete_action" prefWidth="25.0">
                         <HBox.margin>
                            <Insets left="10.0" />
@@ -121,6 +116,18 @@
                         <graphic>
                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                               <Image url="@../images/deleteicon.png" />
+                           </ImageView>
+                        </graphic>
+                        <HBox.margin>
+                           <Insets left="10.0" />
+                        </HBox.margin>
+                     </Button>
+                     <Button mnemonicParsing="false" onAction="#generateReportAction">
+                        <graphic>
+                           <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@../images/txtreport.png" />
+                              </image>
                            </ImageView>
                         </graphic>
                         <HBox.margin>
