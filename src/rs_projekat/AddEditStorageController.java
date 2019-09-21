@@ -50,11 +50,29 @@ public class AddEditStorageController {
         });
 
         quantityFld.textProperty().addListener((observableValue, s, t1) -> {
+            fieldValidate();
             if(t1.isEmpty()) {
                 t1 = "0";
             }
             totalPriceFld.setText(String.valueOf(Integer.parseInt(t1)*Double.parseDouble(pricePerItemFld.getText())));
         });
+    }
+
+    public void fieldValidate () {
+        if (quantityFld.getText().trim().isEmpty()) {
+            quantityFld.getStyleClass().add("notvalid");
+        }
+        else quantityFld.getStyleClass().removeAll("notvalid");
+
+        if (pricePerItemFld.getText().trim().isEmpty()) {
+            pricePerItemFld.getStyleClass().add("notvalid");
+        }
+        else pricePerItemFld.getStyleClass().removeAll("notvalid");
+
+        if (totalPriceFld.getText().trim().isEmpty()){
+            totalPriceFld.getStyleClass().add("notvalid");
+        }
+        else totalPriceFld.getStyleClass().removeAll("notvalid");
     }
 
     private int getItemID() {

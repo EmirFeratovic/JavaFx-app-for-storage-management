@@ -51,12 +51,11 @@ public class AddEditWarehouseController{
             warehouseNameFld.setText(warehouse.getName());
             warehouseLocationFld.setText(warehouse.getLocation());
         }
+        else fieldValidate();
         warehouseNameFld.textProperty().addListener((observableValue, s, t1) -> {
-            warehouseNameFld.setText(t1);
             fieldValidate();
         });
         warehouseLocationFld.textProperty().addListener((observableValue, s, t1) -> {
-            warehouseLocationFld.setText(t1);
             fieldValidate();
         });
     }

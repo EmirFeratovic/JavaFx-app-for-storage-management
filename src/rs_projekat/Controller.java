@@ -10,10 +10,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -49,7 +53,6 @@ public class Controller {
     public TextField weight_fld;
     public TextArea desc_textarea;
     public Button item_addbtn;
-    public Button item_editbtn;
     public Button item_deletebtn;
     private StorageDAOdb dao;
     private Warehouse warehouseAll = new Warehouse(-1, "All", "All");
@@ -65,6 +68,15 @@ public class Controller {
 
     @FXML
     public void initialize() {
+        locations_cb.setTooltip(new Tooltip("Filter by warehouse"));
+        item_addbtn.setTooltip(new Tooltip("Add new item"));
+        item_deletebtn.setTooltip(new Tooltip("Delete selected item"));
+        storage_addbtn.setTooltip(new Tooltip("Add new record"));
+        storage_deletebtn.setTooltip(new Tooltip("Delete selected record"));
+        storage_editbtn.setTooltip(new Tooltip("Edit selected record"));
+        warehouse_addbtn.setTooltip(new Tooltip("Add new warehouse"));
+        warehouse_deletebtn.setTooltip(new Tooltip("Delete selected warehouse"));
+        warehouse_editbtn.setTooltip(new Tooltip("Edit selected warehouse"));
         warehouses =  FXCollections.observableArrayList(dao.getWarehouses());
         filtered = FXCollections.observableArrayList(warehouses);
 
@@ -138,6 +150,7 @@ public class Controller {
             storage_tbl.refresh();
     });
         fld_name.textProperty().addListener((observableValue, s, t1) -> {
+            fieldValidate();
             item_list.getSelectionModel().getSelectedItem().setName(t1);
             for (StorageItem stIt: storageItems) {
                 if(stIt.getItem().getId() == item_list.getSelectionModel().getSelectedItem().getId()){
@@ -152,9 +165,9 @@ public class Controller {
             storage_tbl.refresh();
         });
 
-        price_fld.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; item_list.getSelectionModel().getSelectedItem().setPrice(Double.parseDouble(t1));dao.editItem(item_list.getSelectionModel().getSelectedItem()); storage_tbl.setItems(FXCollections.observableArrayList(dao.getStorages()));storage_tbl.refresh();});
-        weight_fld.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
-        desc_textarea.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
+        price_fld.textProperty().addListener((observableValue, s, t1) -> { fieldValidate(); if(items.isEmpty()) return; item_list.getSelectionModel().getSelectedItem().setPrice(Double.parseDouble(t1));dao.editItem(item_list.getSelectionModel().getSelectedItem()); storage_tbl.setItems(FXCollections.observableArrayList(dao.getStorages()));storage_tbl.refresh();});
+        weight_fld.textProperty().addListener((observableValue, s, t1) -> {fieldValidate(); if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
+        desc_textarea.textProperty().addListener((observableValue, s, t1) -> {fieldValidate(); if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
 
     }
 
@@ -183,6 +196,30 @@ public class Controller {
             e.printStackTrace();
         }
     }
+
+    public void fieldValidate () {
+        if (fld_name.getText().trim().isEmpty()) {
+            fld_name.getStyleClass().add("notvalid");
+        }
+        else fld_name.getStyleClass().removeAll("notvalid");
+
+        if (price_fld.getText().trim().isEmpty()){
+            price_fld.getStyleClass().add("notvalid");
+        }
+        else price_fld.getStyleClass().removeAll("notvalid");
+
+        if (weight_fld.getText().trim().isEmpty()){
+            weight_fld.getStyleClass().add("notvalid");
+        }
+        else weight_fld.getStyleClass().removeAll("notvalid");
+
+        if (desc_textarea.getText().trim().isEmpty()){
+            desc_textarea.getStyleClass().add("notvalid");
+        }
+        else desc_textarea.getStyleClass().removeAll("notvalid");
+
+    }
+
 
     public void warehouseedit_action(ActionEvent actionEvent) {
         if(warehouse_tbl.getSelectionModel().getSelectedItem() == null) return;
@@ -344,4 +381,45 @@ public class Controller {
         }
     }
 
+
+    public void generateReportAction() {
+        if(dao.getStorages().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Report not generated");
+            alert.setHeaderText("No records in table");
+            alert.showAndWait();
+            return;
+        }
+        PrintWriter output = null;
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Report");
+        File defaultDirectory = new File(System.getProperty("user.home"));
+        chooser.setInitialDirectory(defaultDirectory);
+        File file = chooser.showSaveDialog(new Stage());
+        try {
+            FileWriter writer = new FileWriter(file, false);
+            output = new PrintWriter(writer);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Report not generated");
+            alert.setHeaderText("Report could not be generated at " + file.getAbsolutePath());
+            alert.showAndWait();
+            e.printStackTrace();
+        }
+        if(output != null) {
+            output.println(String.format("%3s", "#") + " " + String.format("%-25s" , "Warehouse") + " " +
+                    String.format("%-35s", "Item") + " " + String.format("%-8s", "Quantity") + " " + String.format("%-14s", "Price per item")
+            + " " + String.format("%-15s", "Total price"));
+            for (StorageItem storageItem : dao.getStorages()) {
+                output.println(String.format("%3d", storageItem.getId()) + " " + String.format("%-25s" , storageItem.getWarehouse().toString()) + " " +
+                        String.format("%-35s", storageItem.getItem().getName()) + " " + String.format("%-8d", storageItem.getQuantity()) + " " + String.format("%-14.2f", storageItem.getPricePerItem())
+                        + " " + String.format("%-15.2f", storageItem.getTotalPrice()));
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Report generated");
+            alert.setHeaderText("Report generated at " + file.getAbsolutePath());
+            alert.showAndWait();
+            output.close();
+        }
+    }
 }
