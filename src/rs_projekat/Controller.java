@@ -1,9 +1,6 @@
-package sample;
+package rs_projekat;
 
-import javafx.beans.Observable;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,7 +14,6 @@ import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -143,12 +139,20 @@ public class Controller {
     });
         fld_name.textProperty().addListener((observableValue, s, t1) -> {
             item_list.getSelectionModel().getSelectedItem().setName(t1);
+            for (StorageItem stIt: storageItems) {
+                if(stIt.getItem().getId() == item_list.getSelectionModel().getSelectedItem().getId()){
+                    stIt.getItem().setName(t1);
+                }
+            }
+            storage_tbl.refresh();
+            locations_cb.getSelectionModel().selectFirst();
+            locations_cb.getSelectionModel().select(warehouseAll);
             dao.editItem(item_list.getSelectionModel().getSelectedItem());
             item_list.refresh();
             storage_tbl.refresh();
         });
 
-        price_fld.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
+        price_fld.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; item_list.getSelectionModel().getSelectedItem().setPrice(Double.parseDouble(t1));dao.editItem(item_list.getSelectionModel().getSelectedItem()); storage_tbl.setItems(FXCollections.observableArrayList(dao.getStorages()));storage_tbl.refresh();});
         weight_fld.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
         desc_textarea.textProperty().addListener((observableValue, s, t1) -> {if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
 
@@ -159,8 +163,8 @@ public class Controller {
         stage.setResizable(false);
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditWarehouse.fxml"));
-            addeditControllerWarehouse warehouseController = new addeditControllerWarehouse(null);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addEditWarehouse.fxml"));
+            AddEditWarehouseController warehouseController = new AddEditWarehouseController(null);
             loader.setController(warehouseController);
             root = loader.load();
             stage.setTitle("Warehouse");
@@ -186,8 +190,8 @@ public class Controller {
         stage.setResizable(false);
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditWarehouse.fxml"));
-            addeditControllerWarehouse warehouseController = new addeditControllerWarehouse(warehouse_tbl.getSelectionModel().getSelectedItem());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addEditWarehouse.fxml"));
+            AddEditWarehouseController warehouseController = new AddEditWarehouseController(warehouse_tbl.getSelectionModel().getSelectedItem());
             loader.setController(warehouseController);
             root = loader.load();
             stage.setTitle("Warehouse");
@@ -196,6 +200,9 @@ public class Controller {
             stage.setOnHiding(event -> {
                 Warehouse warehouse = warehouseController.getWarehouse();
                 if (warehouse != null) {
+                    for (StorageItem stIt: storageItems ){
+                        if(stIt.getWarehouse().getId() == warehouse.getId()) stIt.getWarehouse().setName(warehouse.getName());
+                    }
                     dao.editWarehouse(warehouse);
                     filtered.setAll(warehouses);
                     filtered.add(warehouseAll);
@@ -233,7 +240,6 @@ public class Controller {
     }
 
 
-
     public void itemadd_action(ActionEvent actionEvent) {
         items.add(new Item());
         item_list.refresh();
@@ -268,8 +274,8 @@ public class Controller {
         stage.setResizable(false);
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditStorage.fxml"));
-            addeditControllerStorage storageController = new addeditControllerStorage(null, dao.getItems(), dao.getWarehouses());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addEditStorage.fxml"));
+            AddEditStorageController storageController = new AddEditStorageController(null, dao.getItems(), dao.getWarehouses());
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");
@@ -298,8 +304,8 @@ public class Controller {
         stage.setResizable(false);
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addeditStorage.fxml"));
-            addeditControllerStorage storageController = new addeditControllerStorage(storage_tbl.getSelectionModel().getSelectedItem(), dao.getItems(),dao.getWarehouses());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addEditStorage.fxml"));
+            AddEditStorageController storageController = new AddEditStorageController(storage_tbl.getSelectionModel().getSelectedItem(), dao.getItems(),dao.getWarehouses());
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");

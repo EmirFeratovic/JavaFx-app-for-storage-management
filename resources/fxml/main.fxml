@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.999-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.999-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rs_projekat.Controller">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
          <Tab fx:id="warehouse_tab" text="Warehouses">
@@ -36,7 +36,7 @@
                         </HBox.margin>
                         <graphic>
                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                              <Image url="@../addicon.png"/>
+                              <Image url="@../images/addicon.png"/>
                            </ImageView>
                         </graphic>
                         <opaqueInsets>
@@ -50,7 +50,7 @@
                         </HBox.margin>
                         <graphic>
                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                              <Image url="@../editicon.png"/>
+                              <Image url="@../images/editicon.png"/>
                            </ImageView>
                         </graphic>
                      </Button>
@@ -61,7 +61,7 @@
                         </HBox.margin>
                         <graphic>
                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                              <Image url="@../deleteicon.png"/>
+                              <Image url="@../images/deleteicon.png"/>
                            </ImageView>
                         </graphic>
                      </Button>
@@ -100,7 +100,7 @@
                              prefWidth="25.0">
                         <graphic>
                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                              <Image url="@../addicon.png"/>
+                              <Image url="@../images/addicon.png"/>
                            </ImageView>
                         </graphic>
                         <HBox.margin>
@@ -111,7 +111,7 @@
                              prefWidth="25.0">
                         <graphic>
                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                              <Image url="@../editicon.png"/>
+                              <Image url="@../images/editicon.png"/>
                            </ImageView>
                         </graphic>
                         <HBox.margin>
@@ -122,7 +122,7 @@
                              prefWidth="25.0">
                         <graphic>
                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                              <Image url="@../deleteicon.png"/>
+                              <Image url="@../images/deleteicon.png"/>
                            </ImageView>
                         </graphic>
                         <HBox.margin>
@@ -212,7 +212,7 @@
                            <graphic>
                               <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true"
                                          preserveRatio="true">
-                                 <Image url="@../addicon.png"/>
+                                 <Image url="@../images/addicon.png"/>
                               </ImageView>
                            </graphic>
                            <opaqueInsets>
@@ -227,7 +227,7 @@
                            <graphic>
                               <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true"
                                          preserveRatio="true">
-                                 <Image url="@../deleteicon.png"/>
+                                 <Image url="@../images/deleteicon.png"/>
                               </ImageView>
                            </graphic>
                         </Button>

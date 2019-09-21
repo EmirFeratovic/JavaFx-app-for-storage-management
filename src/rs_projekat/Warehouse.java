@@ -1,4 +1,4 @@
-package sample;
+package rs_projekat;
 
 import javafx.beans.property.SimpleStringProperty;
 

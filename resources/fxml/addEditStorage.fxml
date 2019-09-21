@@ -34,19 +34,19 @@
             <Label text="Quantity:" GridPane.rowIndex="2" />
             <Label text="Price per item:" GridPane.rowIndex="3" />
             <Label text="Total price:" GridPane.rowIndex="4" />
-            <TextField fx:id="storageqty_fld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="storagepricepi_fld" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="storagetotprice_fld" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <ChoiceBox fx:id="item_cb" prefWidth="310.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <ChoiceBox fx:id="warehouse_cb" prefWidth="310.0" GridPane.columnIndex="1" />
+            <TextField fx:id="quantityFld" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="pricePerItemFld" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="totalPriceFld" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ChoiceBox fx:id="itemChoiceBox" prefWidth="310.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="warehouseChoiceBox" prefWidth="310.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </center>
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="storageok_btn" mnemonicParsing="false" onAction="#storageok_action" text="Ok" />
-            <Button fx:id="storagecancel_btn" mnemonicParsing="false" onAction="#storagecancle_action" text="Cancel" />
+          <Button mnemonicParsing="false" onAction="#okAction" text="Ok" />
+            <Button mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
         </buttons>
          <padding>
             <Insets bottom="10.0" right="10.0" />

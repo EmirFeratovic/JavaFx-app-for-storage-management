@@ -2,5 +2,5 @@ module rs.projekat {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    opens sample;
+    opens rs_projekat;
 }

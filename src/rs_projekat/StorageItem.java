@@ -1,4 +1,4 @@
-package sample;
+package rs_projekat;
 
 public class StorageItem {
     private StorageDAOdb dao = StorageDAOdb.getInstance();
