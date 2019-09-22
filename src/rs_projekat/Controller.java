@@ -24,36 +24,37 @@ import java.util.Optional;
 
 public class Controller {
 
-    public TableView<Warehouse> warehouse_tbl;
-    public TableColumn warehouse_id_col;
-    public TableColumn<Warehouse, String> warehouse_loc_col;
-    public TableColumn<Warehouse, String> warehouse_name_col;
-    public Tab warehouse_tab;
-    public Button warehouse_addbtn;
-    public Button warehouse_editbtn;
-    public Button warehouse_deletebtn;
-    public Tab storage_tab;
-    public TextField search_fld;
-    public ChoiceBox<Warehouse> locations_cb;
-    public Button storage_addbtn;
-    public Button storage_editbtn;
-    public Button storage_deletebtn;
-    public TableView <StorageItem> storage_tbl;
-    public TableColumn <StorageItem , String> storage_id_col;
-    public TableColumn <StorageItem , String> storage_loc_col;
-    public TableColumn <StorageItem , String> storage_item_col;
-    public TableColumn <StorageItem , String> storage_qyt_col;
-    public TableColumn <StorageItem , String> storage_ppi_col;
-    public TableColumn <StorageItem , String> storage_totprice_col;
-    public Tab item_tab;
-    public ListView<Item> item_list;
-    public TextField fld_id;
-    public TextField fld_name;
-    public TextField price_fld;
-    public TextField weight_fld;
-    public TextArea desc_textarea;
-    public Button item_addbtn;
-    public Button item_deletebtn;
+    public TableView<Warehouse> warehouseTbl;
+    public TableColumn warehouseIdCol;
+    public TableColumn<Warehouse, String> warehouseLocCol;
+    public TableColumn<Warehouse, String> warehouseNameCol;
+    public Tab warehouseTab;
+    public Button warehouseAddBtn;
+    public Button warehouseEditBtn;
+    public Button warehouseDeleteBtn;
+    public Tab storageTab;
+    public TextField searchFld;
+    public ChoiceBox<Warehouse> locationsChoiceBox;
+    public Button storageAddBtn;
+    public Button storageEditBtn;
+    public Button storageDeleteBtn;
+    public TableView <StorageItem> storageTbl;
+    public TableColumn <StorageItem , String> storageIdCol;
+    public TableColumn <StorageItem , String> storageLocCol;
+    public TableColumn <StorageItem , String> storageItemCol;
+    public TableColumn <StorageItem , String> storageQytCol;
+    public TableColumn <StorageItem , String> storagePpiCol;
+    public TableColumn <StorageItem , String> storageTotalCol;
+    public Tab itemTab;
+    public ListView<Item> itemList;
+    public TextField itemIdFld;
+    public TextField itemNameFld;
+    public TextField itemPriceFld;
+    public TextField itemWeightFld;
+    public TextArea itemDescTextarea;
+    public Button itemAddBtn;
+    public Button itemDeleteBtn;
+    public Button reportGenerateBtn;
     private StorageDAOdb dao;
     private Warehouse warehouseAll = new Warehouse(-1, "All", "All");
     private ObservableList<Warehouse> warehouses;
@@ -68,106 +69,108 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        locations_cb.setTooltip(new Tooltip("Filter by warehouse"));
-        item_addbtn.setTooltip(new Tooltip("Add new item"));
-        item_deletebtn.setTooltip(new Tooltip("Delete selected item"));
-        storage_addbtn.setTooltip(new Tooltip("Add new record"));
-        storage_deletebtn.setTooltip(new Tooltip("Delete selected record"));
-        storage_editbtn.setTooltip(new Tooltip("Edit selected record"));
-        warehouse_addbtn.setTooltip(new Tooltip("Add new warehouse"));
-        warehouse_deletebtn.setTooltip(new Tooltip("Delete selected warehouse"));
-        warehouse_editbtn.setTooltip(new Tooltip("Edit selected warehouse"));
+        locationsChoiceBox.setTooltip(new Tooltip("Filter by warehouse"));
+        itemAddBtn.setTooltip(new Tooltip("Add new item"));
+        itemDeleteBtn.setTooltip(new Tooltip("Delete selected item"));
+        storageAddBtn.setTooltip(new Tooltip("Add new record"));
+        storageDeleteBtn.setTooltip(new Tooltip("Delete selected record"));
+        storageEditBtn.setTooltip(new Tooltip("Edit selected record"));
+        warehouseAddBtn.setTooltip(new Tooltip("Add new warehouse"));
+        warehouseDeleteBtn.setTooltip(new Tooltip("Delete selected warehouse"));
+        warehouseEditBtn.setTooltip(new Tooltip("Edit selected warehouse"));
+        reportGenerateBtn.setTooltip(new Tooltip("Generate storage report"));
         warehouses =  FXCollections.observableArrayList(dao.getWarehouses());
         filtered = FXCollections.observableArrayList(warehouses);
 
-        warehouse_tbl.setItems(warehouses);
-        warehouse_id_col.setCellValueFactory(new PropertyValueFactory("id"));
-        warehouse_name_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        warehouse_loc_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocation()));
+        warehouseTbl.setItems(warehouses);
+        warehouseIdCol.setCellValueFactory(new PropertyValueFactory("id"));
+        warehouseNameCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        warehouseLocCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocation()));
 
         storageItems =  FXCollections.observableArrayList(dao.getStorages());
-        storage_tbl.setItems(storageItems);
-        storage_id_col.setCellValueFactory(new PropertyValueFactory("id"));
-        storage_item_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getItem().getName()));
-        storage_loc_col.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getWarehouse().getName()));
-        storage_ppi_col.setCellValueFactory(new PropertyValueFactory("pricePerItem"));
-        storage_qyt_col.setCellValueFactory((new PropertyValueFactory("quantity")));
-        storage_totprice_col.setCellValueFactory((new PropertyValueFactory("totalPrice")));
+        storageTbl.setItems(storageItems);
+        storageIdCol.setCellValueFactory(new PropertyValueFactory("id"));
+        storageItemCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getItem().getName()));
+        storageLocCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getWarehouse().getName()));
+        storagePpiCol.setCellValueFactory(new PropertyValueFactory("pricePerItem"));
+        storageQytCol.setCellValueFactory((new PropertyValueFactory("quantity")));
+        storageTotalCol.setCellValueFactory((new PropertyValueFactory("totalPrice")));
 
         items = FXCollections.observableArrayList(dao.getItems());
-        item_list.setItems(items);
+        itemList.setItems(items);
 
-        item_list.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+        itemList.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             if (oldValue != null) {
-                fld_name.textProperty().unbindBidirectional(oldValue.nameProperty());
-                price_fld.textProperty().unbindBidirectional(oldValue.priceProperty());
-                desc_textarea.textProperty().unbindBidirectional(oldValue.descriptionProperty());
-                weight_fld.textProperty().unbindBidirectional(oldValue.weightProperty());
+                itemNameFld.textProperty().unbindBidirectional(oldValue.nameProperty());
+                itemPriceFld.textProperty().unbindBidirectional(oldValue.priceProperty());
+                itemDescTextarea.textProperty().unbindBidirectional(oldValue.descriptionProperty());
+                itemWeightFld.textProperty().unbindBidirectional(oldValue.weightProperty());
             }
             if (newValue == null) {
-                fld_name.setText("");
-                desc_textarea.setText("");
-                price_fld.setText("0");
-                weight_fld.setText("0");
+                itemNameFld.setText("");
+                itemDescTextarea.setText("");
+                itemPriceFld.setText("0");
+                itemWeightFld.setText("0");
             } else {
-                fld_name.textProperty().bindBidirectional(newValue.nameProperty());
-                price_fld.textProperty().bindBidirectional(newValue.priceProperty(), new NumberStringConverter());
-                desc_textarea.textProperty().bindBidirectional(newValue.descriptionProperty());
-                weight_fld.textProperty().bindBidirectional(newValue.weightProperty(), new NumberStringConverter());
+                itemNameFld.textProperty().bindBidirectional(newValue.nameProperty());
+                itemPriceFld.textProperty().bindBidirectional(newValue.priceProperty(), new NumberStringConverter());
+                itemDescTextarea.textProperty().bindBidirectional(newValue.descriptionProperty());
+                itemWeightFld.textProperty().bindBidirectional(newValue.weightProperty(), new NumberStringConverter());
             }
-            item_list.refresh();
-            storage_tbl.refresh();
+            itemList.refresh();
+            storageTbl.refresh();
 
         });
-            search_fld.textProperty().addListener((observableValue1, s, t1) -> {
+            searchFld.textProperty().addListener((observableValue1, s, t1) -> {
                 ArrayList<StorageItem> filter = new ArrayList<>();
                 for (StorageItem stIt: storageItems) {
-                    if(stIt.getItem().getName().toLowerCase().contains(t1.toLowerCase())&& (stIt.getWarehouse().getId() == locations_cb.getSelectionModel().getSelectedItem().getId() || locations_cb.getSelectionModel().getSelectedItem().getId() == -1)){
+                    if(stIt.getItem().getName().toLowerCase().contains(t1.toLowerCase())&& (stIt.getWarehouse().getId() == locationsChoiceBox.getSelectionModel().getSelectedItem().getId() || locationsChoiceBox.getSelectionModel().getSelectedItem().getId() == -1)){
                         filter.add(stIt);
                     }
                 }
                 ObservableList<StorageItem> filtered = FXCollections.observableArrayList(filter);
-                storage_tbl.setItems(filtered);
-                storage_tbl.refresh();
+                storageTbl.setItems(filtered);
+                storageTbl.refresh();
             });
 
 
         filtered.add(warehouseAll);
 
-        locations_cb.setItems(filtered);
-        locations_cb.getSelectionModel().select(warehouseAll);
+        locationsChoiceBox.setItems(filtered);
+        locationsChoiceBox.getSelectionModel().select(warehouseAll);
 
-        locations_cb.getSelectionModel().selectedItemProperty().addListener((observableValue, warehouse1, t1) -> {
+        locationsChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, warehouse1, t1) -> {
             ArrayList<StorageItem> filter = new ArrayList<>();
             for (StorageItem stIt: storageItems) {
-                if(locations_cb.getSelectionModel().getSelectedItem().getId() == -1 || stIt.getWarehouse().getId()==locations_cb.getSelectionModel().getSelectedItem().getId()) {
+                if(locationsChoiceBox.getSelectionModel().getSelectedItem().getId() == -1 || stIt.getWarehouse().getId()== locationsChoiceBox.getSelectionModel().getSelectedItem().getId()) {
                     filter.add(stIt);
                 }
             }
             storageItems2 = FXCollections.observableArrayList(filter);
 
-            storage_tbl.setItems(storageItems2);
-            storage_tbl.refresh();
+            storageTbl.setItems(storageItems2);
+            storageTbl.refresh();
     });
-        fld_name.textProperty().addListener((observableValue, s, t1) -> {
+        itemNameFld.textProperty().addListener((observableValue, s, t1) -> {
             fieldValidate();
-            item_list.getSelectionModel().getSelectedItem().setName(t1);
+            itemList.getSelectionModel().getSelectedItem().setName(t1);
             for (StorageItem stIt: storageItems) {
-                if(stIt.getItem().getId() == item_list.getSelectionModel().getSelectedItem().getId()){
+                if(stIt.getItem().getId() == itemList.getSelectionModel().getSelectedItem().getId()){
                     stIt.getItem().setName(t1);
                 }
             }
-            storage_tbl.refresh();
-            locations_cb.getSelectionModel().selectFirst();
-            locations_cb.getSelectionModel().select(warehouseAll);
-            dao.editItem(item_list.getSelectionModel().getSelectedItem());
-            item_list.refresh();
-            storage_tbl.refresh();
+            storageTbl.refresh();
+            locationsChoiceBox.getSelectionModel().selectFirst();
+            locationsChoiceBox.getSelectionModel().select(warehouseAll);
+            dao.editItem(itemList.getSelectionModel().getSelectedItem());
+            itemList.refresh();
+            storageTbl.refresh();
         });
 
-        price_fld.textProperty().addListener((observableValue, s, t1) -> { fieldValidate(); if(items.isEmpty()) return; item_list.getSelectionModel().getSelectedItem().setPrice(Double.parseDouble(t1));dao.editItem(item_list.getSelectionModel().getSelectedItem()); storage_tbl.setItems(FXCollections.observableArrayList(dao.getStorages()));storage_tbl.refresh();});
-        weight_fld.textProperty().addListener((observableValue, s, t1) -> {fieldValidate(); if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
-        desc_textarea.textProperty().addListener((observableValue, s, t1) -> {fieldValidate(); if(items.isEmpty()) return; dao.editItem(item_list.getSelectionModel().getSelectedItem());});
+        itemPriceFld.textProperty().addListener((observableValue, s, t1) -> { fieldValidate(); if(items.isEmpty()) return; itemList.getSelectionModel().getSelectedItem().setPrice(Double.parseDouble(t1));dao.editItem(itemList.getSelectionModel().getSelectedItem()); storageTbl.setItems(FXCollections.observableArrayList(dao.getStorages()));
+            storageTbl.refresh();});
+        itemWeightFld.textProperty().addListener((observableValue, s, t1) -> {fieldValidate(); if(items.isEmpty()) return; dao.editItem(itemList.getSelectionModel().getSelectedItem());});
+        itemDescTextarea.textProperty().addListener((observableValue, s, t1) -> {fieldValidate(); if(items.isEmpty()) return; dao.editItem(itemList.getSelectionModel().getSelectedItem());});
 
     }
 
@@ -189,7 +192,7 @@ public class Controller {
                     dao.addWarehouse(warehouse);
                     warehouses.add(warehouse);
                     filtered.add(warehouse);
-                    warehouse_tbl.refresh();
+                    warehouseTbl.refresh();
                 }
             });
         } catch (IOException e) {
@@ -198,37 +201,37 @@ public class Controller {
     }
 
     public void fieldValidate () {
-        if (fld_name.getText().trim().isEmpty()) {
-            fld_name.getStyleClass().add("notvalid");
+        if (itemNameFld.getText().trim().isEmpty()) {
+            itemNameFld.getStyleClass().add("notvalid");
         }
-        else fld_name.getStyleClass().removeAll("notvalid");
+        else itemNameFld.getStyleClass().removeAll("notvalid");
 
-        if (price_fld.getText().trim().isEmpty()){
-            price_fld.getStyleClass().add("notvalid");
+        if (itemPriceFld.getText().trim().isEmpty()){
+            itemPriceFld.getStyleClass().add("notvalid");
         }
-        else price_fld.getStyleClass().removeAll("notvalid");
+        else itemPriceFld.getStyleClass().removeAll("notvalid");
 
-        if (weight_fld.getText().trim().isEmpty()){
-            weight_fld.getStyleClass().add("notvalid");
+        if (itemWeightFld.getText().trim().isEmpty()){
+            itemWeightFld.getStyleClass().add("notvalid");
         }
-        else weight_fld.getStyleClass().removeAll("notvalid");
+        else itemWeightFld.getStyleClass().removeAll("notvalid");
 
-        if (desc_textarea.getText().trim().isEmpty()){
-            desc_textarea.getStyleClass().add("notvalid");
+        if (itemDescTextarea.getText().trim().isEmpty()){
+            itemDescTextarea.getStyleClass().add("notvalid");
         }
-        else desc_textarea.getStyleClass().removeAll("notvalid");
+        else itemDescTextarea.getStyleClass().removeAll("notvalid");
 
     }
 
 
     public void warehouseedit_action(ActionEvent actionEvent) {
-        if(warehouse_tbl.getSelectionModel().getSelectedItem() == null) return;
+        if(warehouseTbl.getSelectionModel().getSelectedItem() == null) return;
         Stage stage = new Stage();
         stage.setResizable(false);
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addEditWarehouse.fxml"));
-            AddEditWarehouseController warehouseController = new AddEditWarehouseController(warehouse_tbl.getSelectionModel().getSelectedItem());
+            AddEditWarehouseController warehouseController = new AddEditWarehouseController(warehouseTbl.getSelectionModel().getSelectedItem());
             loader.setController(warehouseController);
             root = loader.load();
             stage.setTitle("Warehouse");
@@ -243,8 +246,8 @@ public class Controller {
                     dao.editWarehouse(warehouse);
                     filtered.setAll(warehouses);
                     filtered.add(warehouseAll);
-                    storage_tbl.refresh();
-                    warehouse_tbl.refresh();
+                    storageTbl.refresh();
+                    warehouseTbl.refresh();
                 }
             });
 
@@ -254,8 +257,8 @@ public class Controller {
     }
 
     public void warehousedelete_action(ActionEvent actionEvent) {
-        if (warehouse_tbl.getSelectionModel().isEmpty()) return;
-        Warehouse warehouse = warehouse_tbl.getSelectionModel().getSelectedItem();
+        if (warehouseTbl.getSelectionModel().isEmpty()) return;
+        Warehouse warehouse = warehouseTbl.getSelectionModel().getSelectedItem();
         if (warehouse == null) return;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -268,25 +271,25 @@ public class Controller {
             dao.deleteStorageByWarehouse(warehouse);
             dao.deleteWarehouse(warehouse);
             filtered.remove(warehouse);
-            warehouses.remove(warehouse_tbl.getSelectionModel().getSelectedItem());
+            warehouses.remove(warehouseTbl.getSelectionModel().getSelectedItem());
             storageItems = FXCollections.observableArrayList(dao.getStorages());
-            storage_tbl.setItems(storageItems);
-            storage_tbl.refresh();
-            warehouse_tbl.refresh();
+            storageTbl.setItems(storageItems);
+            storageTbl.refresh();
+            warehouseTbl.refresh();
         }
     }
 
 
     public void itemadd_action(ActionEvent actionEvent) {
         items.add(new Item());
-        item_list.refresh();
-        item_list.getSelectionModel().selectLast();
-        dao.addItem(item_list.getSelectionModel().getSelectedItem());
+        itemList.refresh();
+        itemList.getSelectionModel().selectLast();
+        dao.addItem(itemList.getSelectionModel().getSelectedItem());
     }
 
     public void itemdelete_action(ActionEvent actionEvent) {
-        if (item_list.getSelectionModel().isEmpty()) return;
-        Item item = item_list.getSelectionModel().getSelectedItem();
+        if (itemList.getSelectionModel().isEmpty()) return;
+        Item item = itemList.getSelectionModel().getSelectedItem();
         if (item == null) return;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -300,9 +303,9 @@ public class Controller {
             dao.deleteItem(item);
             items.removeAll(item);
             storageItems = FXCollections.observableArrayList(dao.getStorages());
-            storage_tbl.setItems(storageItems);
-            storage_tbl.refresh();
-            item_list.refresh();
+            storageTbl.setItems(storageItems);
+            storageTbl.refresh();
+            itemList.refresh();
         }
     }
 
@@ -323,10 +326,10 @@ public class Controller {
                 if (storageItem != null) {
                     dao.addStorage(storageItem);
                     storageItems.add(storageItem);
-                    locations_cb.getSelectionModel().selectFirst();
-                    locations_cb.getSelectionModel().selectLast();
-                    locations_cb.getSelectionModel().select(warehouseAll);
-                    storage_tbl.refresh();
+                    locationsChoiceBox.getSelectionModel().selectFirst();
+                    locationsChoiceBox.getSelectionModel().selectLast();
+                    locationsChoiceBox.getSelectionModel().select(warehouseAll);
+                    storageTbl.refresh();
                 }
             });
         } catch (IOException e) {
@@ -336,13 +339,13 @@ public class Controller {
 
 
     public void storageedit_action(ActionEvent actionEvent) {
-        if (storage_tbl.getSelectionModel().getSelectedItem() == null) return;
+        if (storageTbl.getSelectionModel().getSelectedItem() == null) return;
         Stage stage = new Stage();
         stage.setResizable(false);
         Parent root;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/addEditStorage.fxml"));
-            AddEditStorageController storageController = new AddEditStorageController(storage_tbl.getSelectionModel().getSelectedItem(), dao.getItems(),dao.getWarehouses());
+            AddEditStorageController storageController = new AddEditStorageController(storageTbl.getSelectionModel().getSelectedItem(), dao.getItems(),dao.getWarehouses());
             loader.setController(storageController);
             root = loader.load();
             stage.setTitle("Storage");
@@ -352,7 +355,7 @@ public class Controller {
                 StorageItem storageItem = storageController.getStorageItem();
                 if (storageItem != null) {
                     dao.editStorage(storageItem);
-                    storage_tbl.refresh();
+                    storageTbl.refresh();
                 }
             });
         } catch (IOException e) {
@@ -361,8 +364,8 @@ public class Controller {
     }
 
     public void storagedelete_action(ActionEvent actionEvent) {
-        if (storage_tbl.getSelectionModel().isEmpty()) return;
-        StorageItem storage = storage_tbl.getSelectionModel().getSelectedItem();
+        if (storageTbl.getSelectionModel().isEmpty()) return;
+        StorageItem storage = storageTbl.getSelectionModel().getSelectedItem();
         if (storage == null) return;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -374,10 +377,10 @@ public class Controller {
         if (result.get() == ButtonType.OK){
             dao.deleteStorage(storage);
             storageItems.removeAll(storage);
-            locations_cb.getSelectionModel().selectFirst();
-            locations_cb.getSelectionModel().selectLast();
-            locations_cb.getSelectionModel().select(warehouseAll);
-            storage_tbl.refresh();
+            locationsChoiceBox.getSelectionModel().selectFirst();
+            locationsChoiceBox.getSelectionModel().selectLast();
+            locationsChoiceBox.getSelectionModel().select(warehouseAll);
+            storageTbl.refresh();
         }
     }
 
