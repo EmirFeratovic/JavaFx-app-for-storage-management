@@ -36,8 +36,6 @@ public class AddEditStorageController {
         totalPriceFld.setText("1");
         totalPriceFld.setEditable(false);
             if(storageItem != null) {
-                System.out.println("S" + storageItem.getId() + "W"
-                + storageItem.getWarehouse().getId() + "I" +storageItem.getItem().getId());
                 warehouseChoiceBox.getSelectionModel().select(getWarehouseID());
                 itemChoiceBox.getSelectionModel().select(getItemID());
                 quantityFld.setText(String.valueOf(storageItem.getQuantity()));

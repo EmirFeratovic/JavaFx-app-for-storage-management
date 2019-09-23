@@ -409,6 +409,7 @@ public class Controller {
             alert.showAndWait();
             e.printStackTrace();
         }
+
         if(output != null) {
             output.println(String.format("%3s", "#") + " " + String.format("%-25s" , "Warehouse") + " " +
                     String.format("%-35s", "Item") + " " + String.format("%-8s", "Quantity") + " " + String.format("%-14s", "Price per item")
