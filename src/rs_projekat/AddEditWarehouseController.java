@@ -2,6 +2,7 @@ package rs_projekat;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -9,6 +10,7 @@ public class AddEditWarehouseController{
     public TextField warehouseNameFld;
     public TextField warehouseLocationFld;
     private Warehouse warehouse;
+    public Button warehouseOkBtn;
 
 
     public AddEditWarehouseController(Warehouse warehouse) {

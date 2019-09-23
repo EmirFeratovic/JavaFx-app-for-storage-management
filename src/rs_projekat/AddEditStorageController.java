@@ -3,6 +3,7 @@ package rs_projekat;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -15,6 +16,7 @@ public class AddEditStorageController {
     public TextField quantityFld;
     public TextField pricePerItemFld;
     public TextField totalPriceFld;
+    public Button storageOkBtn;
     private StorageItem storageItem;
     private ObservableList<Item> items;
     private ObservableList<Warehouse> warehouses;
@@ -34,6 +36,8 @@ public class AddEditStorageController {
         totalPriceFld.setText("1");
         totalPriceFld.setEditable(false);
             if(storageItem != null) {
+                System.out.println("S" + storageItem.getId() + "W"
+                + storageItem.getWarehouse().getId() + "I" +storageItem.getItem().getId());
                 warehouseChoiceBox.getSelectionModel().select(getWarehouseID());
                 itemChoiceBox.getSelectionModel().select(getItemID());
                 quantityFld.setText(String.valueOf(storageItem.getQuantity()));
@@ -56,6 +60,10 @@ public class AddEditStorageController {
             }
             totalPriceFld.setText(String.valueOf(Integer.parseInt(t1)*Double.parseDouble(pricePerItemFld.getText())));
         });
+
+        itemChoiceBox.valueProperty().addListener((observableValue, item, t1) -> {
+            pricePerItemFld.setText(String.valueOf(t1.getPrice()));
+        });
     }
 
     public void fieldValidate () {
@@ -77,8 +85,8 @@ public class AddEditStorageController {
 
     private int getItemID() {
         int id = 0;
-        for (Warehouse warehouse : warehouses)
-            if (warehouse.getId() == storageItem.getWarehouse().getId()) id = warehouses.indexOf(warehouse);
+        for (Item item : items)
+            if (item.getId() == storageItem.getItem().getId()) id = items.indexOf(item);
         return id;
     }
 
