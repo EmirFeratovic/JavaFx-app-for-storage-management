@@ -199,11 +199,11 @@ public class AllTests {
     @Test
     public void testEditWarehouseBase() {
         Warehouse warehouse = new Warehouse();
-        warehouse.setId(1);
+        warehouse.setId(dao.nextWarehouseId()-1);
         warehouse.setName("WarehouseTest");
         warehouse.setLocation("WarehouseTest");
         dao.editWarehouse(warehouse);
-        assertEquals("WarehouseTest", dao.getWarehouse(1).getName());
+        assertEquals("WarehouseTest", dao.getWarehouse(dao.nextWarehouseId()-1).getName());
     }
 
     @Test
@@ -218,17 +218,71 @@ public class AllTests {
         dao.addStorage(storageItem);
         assertEquals(dao.getItems().get(0).getId(), storageItem.getItem().getId());
 
-        //todo delete warehouse,storage,item
-        //todo edit warehouse,storage,item
-        //todo add item
-        //todo delete,edit,add from base warehouse,item,storage
     }
 
     @Test
     public void testDeleteStorageBase(){
-
+        int numOfStorages = dao.getStorages().size();
+        Warehouse warehouse = dao.getWarehouse(dao.nextWarehouseId()-1);
+        Item item = dao.getItem(dao.nextItemId()-1);
+        StorageItem storage = new StorageItem();
+        storage.setId(dao.nextStorageId());
+        storage.setWarehouse(warehouse);
+        storage.setItem(item);
+        storage.setQuantity(1);
+        storage.setPricePerItem(1);
+        storage.setTotalPrice(1);
+        dao.addStorage(storage);
+        dao.deleteStorage(storage);
+        assertEquals(numOfStorages,dao.getStorages().size());
     }
 
+    @Test
+    public void testEditStorageBase(){
+        StorageItem storage = dao.getStorages().get(0);
+        storage.setQuantity(1312);
+        dao.editStorage(storage);
+        assertEquals(1312 ,dao.getStorages().get(0).getQuantity());
+    }
+
+    @Test
+    public void  testAddItemBase() {
+        int numOfItems = dao.getItems().size();
+        Item item = new Item();
+        item.setId(dao.nextItemId());
+        item.setWeight(1);
+        item.setDescription("This item is for testing purposes");
+        item.setPrice(120);
+        item.setName("ItemTestName");
+        dao.addItem(item);
+        assertEquals(numOfItems+1,dao.getItems().size());
+    }
+
+    @Test
+    public void testDeleteItemBase(){
+        int numOfItems = dao.getItems().size();
+        Item item = new Item();
+        item.setId(dao.nextItemId());
+        item.setName("ItemTestName");
+        item.setPrice(100);
+        item.setWeight(1);
+        item.setDescription("This item is for testing purposes");
+        dao.addItem(item);
+        dao.deleteItem(item);
+        assertEquals(numOfItems,dao.getItems().size());
+    }
+
+    @Test
+    public void testEditItemBase(){
+        Item item = new Item();
+        item.setId(dao.nextItemId()-1);
+        item.setName("ItemTest");
+        item.setPrice(200);
+        item.setWeight(1);
+        item.setDescription("This item is for testing purposes");
+        dao.editItem(item);
+        assertEquals("ItemTest", dao.getItem(dao.nextItemId()-1).getName());
+    }
 
 
 }
