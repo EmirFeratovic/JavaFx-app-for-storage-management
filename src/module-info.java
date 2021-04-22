@@ -1,6 +1,6 @@
-module rs.projekat {
+module icr.etf.unsa.ba {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    opens rs_projekat;
+    opens icr.etf.unsa.ba;
 }
